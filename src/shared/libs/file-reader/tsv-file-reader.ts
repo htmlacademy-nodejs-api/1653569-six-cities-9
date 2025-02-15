@@ -10,7 +10,7 @@ export class TSVFileReader implements FileReader {
   ) {}
 
   private validateRawData(): void {
-    if (! this.rawData) {
+    if (!this.rawData) {
       throw new Error('File was not read');
     }
   }
@@ -18,7 +18,7 @@ export class TSVFileReader implements FileReader {
   private parseRawDataToOffers(): Offer[] {
     return this.rawData
       .split('\n')
-      .filter((row) => row.trim().length)
+      .filter((row) => row.trim().length > 0)
       .map((line) => this.parseLineToOffer(line));
   }
 
@@ -54,8 +54,8 @@ export class TSVFileReader implements FileReader {
       city: city as City,
       previewImage: previewImage || '',
       images: this.parseStringToArray<string[]>(images),
-      isPremium: isPremium === 'true',
-      isFavorite: isFavorite === 'true',
+      isPremium: this.parseBooleen(isPremium),
+      isFavorite: this.parseBooleen(isFavorite),
       rating: this.parseStringToNumber(rating),
       type: type as OfferType,
       bedrooms: this.parseStringToNumber(bedrooms),
@@ -76,6 +76,10 @@ export class TSVFileReader implements FileReader {
     return Number.parseInt(value, 10) || 0;
   }
 
+  private parseBooleen(value: string): boolean {
+    return value === 'true' || false;
+  }
+
   private parseLocation(location: string): Location {
     const [latitude, longitude] = location.split(';');
     return {
@@ -89,7 +93,8 @@ export class TSVFileReader implements FileReader {
     email: string,
     password: string,
     avatarPath: string,
-    userType: string): User {
+    userType: string
+  ): User {
     return {
       name: name || '',
       email: email || '',
