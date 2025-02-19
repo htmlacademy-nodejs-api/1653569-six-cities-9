@@ -77,7 +77,7 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseBooleen(value: string): boolean {
-    return value === 'true' || false;
+    return value === 'true';
   }
 
   private parseLocation(location: string): Location {
