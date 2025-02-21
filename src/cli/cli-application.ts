@@ -1,10 +1,8 @@
 import { Command } from './commands/command.interface.js';
 import { CommandParser } from './command-parser.js';
 
-type CommandCollection = Record<string, Command>;
-
 export class CLIApplication {
-  private commands: CommandCollection = {};
+  private commands: Record<string, Command> = {};
 
   constructor(
     private readonly defaultCommand: string = '--help'
