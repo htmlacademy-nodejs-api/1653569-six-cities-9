@@ -53,7 +53,6 @@ export class TSVOfferGenerator implements OfferGenerator {
     const comments = generateRandomValue(Comments.MIN, Comments.MAX);
     const name = getRandomItem(this.mockData.authors);
     const email = getRandomItem(this.mockData.emails);
-    const password = getRandomItem(this.mockData.passwords);
     const avatar = getRandomItem(this.mockData.avatarPaths);
     const userType = getRandomItem(this.mockData.userTypes);
 
@@ -61,7 +60,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       .subtract(generateRandomValue(Weekday.FIRST, Weekday.LAST), 'day')
       .toISOString();
 
-    const user = [name, email, password, avatar, userType].join(';');
+    const user = [name, email, avatar, userType].join(';');
     const location = [city.location.latitude, city.location.longitude].join(';');
 
     return [

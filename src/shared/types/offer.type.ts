@@ -4,6 +4,8 @@ import { Goods } from './goods.enum.js';
 import { User } from './user.type.js';
 import { Location } from './location.type.js';
 
+export type OfferId = string;
+
 export type Offer = {
   title: string;
   description: string;
