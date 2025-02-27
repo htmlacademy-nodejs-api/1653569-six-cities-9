@@ -1,6 +1,4 @@
-import { City } from './city.type.js';
-import { Goods } from './goods.enum.js';
-import { OfferType } from './offer-type.enum.js';
+import { City, OfferType, Goods } from './index.js';
 
 export type MockServerData = {
   titles: string[];
