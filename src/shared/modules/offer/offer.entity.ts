@@ -10,7 +10,7 @@ import { CityName, Goods, Location, OfferType } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
-export interface OfferEntity extends defaultClasses.Base { }
+export interface OfferEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
@@ -30,7 +30,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public createdDate!: Date;
 
-  @prop({ type: () => String, enum: CityName, default: CityName.Paris, required: true })
+  @prop({ type: () => String, enum: CityName, required: true })
   public city!: CityName;
 
   @prop({ required: true })
@@ -39,10 +39,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public images!: string[];
 
-  @prop({ default: false, required: true })
+  @prop({ required: true })
   public isPremium!: boolean;
 
-  @prop({ required: true })
+  @prop({ default: false, required: true})
   public isFavorite!: boolean;
 
   @prop({ required: true })

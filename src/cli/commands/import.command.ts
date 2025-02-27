@@ -11,10 +11,10 @@ import { DefaultUserService, UserModel, UserService } from '../../shared/modules
 import { DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD } from './command.constant.js';
 
 export class ImportCommand implements Command {
-  private userService: UserService;
-  private offerService: OfferService;
-  private databaseClient: DatabaseClient;
-  private logger: Logger;
+  private readonly userService: UserService;
+  private readonly offerService: OfferService;
+  private readonly databaseClient: DatabaseClient;
+  private readonly logger: Logger;
   private salt: string;
 
   constructor() {
@@ -33,20 +33,19 @@ export class ImportCommand implements Command {
   }
 
   private async saveOffer(offer: Offer) {
-    const user = await this.userService.findOrCreate({
-      ...offer.author,
-      password: DEFAULT_USER_PASSWORD
-    }, this.salt);
+    const user = await this.userService.findOrCreate(
+      Object.assign({}, offer.author, { password: DEFAULT_USER_PASSWORD }),
+      this.salt
+    );
 
     await this.offerService.create({
       title: offer.title,
       description: offer.description,
       createdDate: offer.createdDate,
-      cityName: offer.city,
+      city: offer.city,
       previewImage: offer.previewImage,
       images: offer.images,
       isPremium: offer.isPremium,
-      isFavorite: offer.isFavorite,
       rating: offer.rating,
       type: offer.type,
       bedrooms: offer.bedrooms,

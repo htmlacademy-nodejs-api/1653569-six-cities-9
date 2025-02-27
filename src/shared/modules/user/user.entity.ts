@@ -21,12 +21,12 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   public email: string;
 
   @prop({ required: true })
-  private password?: string;
+  private password: string;
 
-  @prop({ default: 'img/default-avatar.jpg', required: false })
+  @prop({ required: false })
   public avatarPath: string;
 
-  @prop({ required: true, default: UserType.Regular })
+  @prop({ default: UserType.Regular, required: true })
   public type: UserType;
 
   constructor(userData: User) {
@@ -42,7 +42,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     this.password = createSHA256(password, salt);
   }
 
-  public getPassword() {
+  public get getPassword() {
     return this.password;
   }
 }
