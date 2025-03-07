@@ -29,7 +29,7 @@ export class OfferController extends BaseController {
 
     if (!offers.length) {
       throw new HttpError(
-        StatusCodes.NOT_FOUND,
+        StatusCodes.OK,
         'The offers was not found.',
         'OfferController',
       );

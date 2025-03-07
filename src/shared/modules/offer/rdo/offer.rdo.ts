@@ -8,8 +8,8 @@ export class OfferRdo {
   @Expose()
   public id: string;
 
-  @Expose()
-  public createdAt: string;
+  @Expose({ name: 'createdAt' })
+  public createdDate: Date;
 
   @Expose()
   public title: string;
@@ -28,6 +28,9 @@ export class OfferRdo {
 
   @Expose()
   public isPremium: boolean;
+
+  @Expose()
+  public isFavorite: boolean;
 
   @Expose()
   public rating: number;

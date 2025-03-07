@@ -1,6 +1,10 @@
 import { Expose } from 'class-transformer';
+import { UserType } from '../../../types/index.js';
 
 export class UserRdo {
+  @Expose()
+  public id: string;
+
   @Expose()
   public name: string;
 
@@ -11,5 +15,5 @@ export class UserRdo {
   public avatarPath: string;
 
   @Expose()
-  public type: string;
+  public type: UserType;
 }

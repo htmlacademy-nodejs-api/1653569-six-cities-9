@@ -11,21 +11,22 @@ import { Route } from '../types/route.interface.js';
 @injectable()
 export abstract class BaseController implements Controller {
   private readonly DEFAULT_CONTENT_TYPE = 'application/json';
-  private readonly _router: Router;
+  protected readonly baseRouter: Router;
 
   constructor(
-    protected readonly logger: Logger
+    protected readonly logger: Logger,
   ) {
-    this._router = Router();
+    this.baseRouter = Router();
+    this.logger.info(`Create ${this.constructor.name}:`);
   }
 
-  get router() {
-    return this._router;
+  public get router() {
+    return this.baseRouter;
   }
 
   public addRoute(route: Route) {
     const wrapperAsyncHandler = asyncHandler(route.handler.bind(this));
-    this._router[route.method](route.path, wrapperAsyncHandler);
+    this.baseRouter[route.method](route.path, wrapperAsyncHandler);
     this.logger.info(`Route registered: ${route.method.toUpperCase()} ${route.path}`);
   }
 
@@ -46,5 +47,13 @@ export abstract class BaseController implements Controller {
 
   public noContent<T>(res: Response, data: T): void {
     this.send(res, StatusCodes.NO_CONTENT, data);
+  }
+
+  public notFound<T>(res: Response, data: T): void {
+    this.send(res, StatusCodes.NOT_FOUND, data);
+  }
+
+  public notAllow<T>(res: Response, data: T): void {
+    this.send(res, StatusCodes.FORBIDDEN, data);
   }
 }

@@ -35,21 +35,22 @@ export class RestApplication {
     return this.databaseClient.connect(mongoUri);
   }
 
-  private async _initServer() {
+  private async initServer() {
+    const host = this.config.get('HOST');
     const port = this.config.get('PORT');
-    this.server.listen(port);
+    this.server.listen(port, host);
   }
 
-  private async _initMiddleware() {
+  private async initMiddleware() {
     this.server.use(express.json());
   }
 
-  private async _initControllers() {
+  private async initControllers() {
     this.server.use('/users', this.userController.router);
     this.server.use('/offers', this.offerController.router);
   }
 
-  private async _initExceptionFilters() {
+  private async initExceptionFilters() {
     this.server.use(this.appExceptionFilter.catch.bind(this.appExceptionFilter));
   }
 
@@ -61,19 +62,19 @@ export class RestApplication {
     this.logger.info('Init database completed');
 
     this.logger.info('Init app-level middleware');
-    await this._initMiddleware();
+    await this.initMiddleware();
     this.logger.info('App-level middleware initialization completed');
 
     this.logger.info('Init controllers');
-    await this._initControllers();
+    await this.initControllers();
     this.logger.info('Controller initialization completed');
 
     this.logger.info('Init exception filters');
-    await this._initExceptionFilters();
+    await this.initExceptionFilters();
     this.logger.info('Exception filters initialization compleated');
 
     this.logger.info('Try to init server...');
-    await this._initServer();
-    this.logger.info(`Server started on http://localhost:${this.config.get('PORT')}`);
+    await this.initServer();
+    this.logger.info(`Server started on http://${this.config.get('HOST')}:${this.config.get('PORT')}`);
   }
 }
