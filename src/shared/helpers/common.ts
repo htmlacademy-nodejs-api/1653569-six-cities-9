@@ -1,3 +1,5 @@
+import { ClassConstructor, plainToInstance } from 'class-transformer';
+
 const ItemCount = {
   MIN: 0,
   MAX: 6,
@@ -29,4 +31,12 @@ export function getRandomBoolean() {
 
 export function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : '';
+}
+
+export function fillDTO<T, V>(someDto: ClassConstructor<T>, plainObject: V) {
+  return plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
+}
+
+export function createErrorObject(message: string) {
+  return { error: message };
 }

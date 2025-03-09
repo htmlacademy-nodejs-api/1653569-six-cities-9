@@ -1,19 +1,16 @@
 import convict from 'convict';
 import validator from 'convict-format-with-validator';
+import { RestSchema } from './index.js';
 
 convict.addFormats(validator);
 
-export type RestSchema = {
-  PORT: number;
-  SALT: string;
-  DB_HOST: string;
-  DB_USER: string;
-  DB_PASSWORD: string;
-  DB_PORT: string;
-  DB_NAME: string;
-}
-
 export const configRestSchema = convict<RestSchema>({
+  HOST: {
+    doc: 'IP address of incoming connections',
+    format: 'ipaddress',
+    env: 'HOST',
+    default: null
+  },
   PORT: {
     doc: 'Port for incoming connections',
     format: 'port',

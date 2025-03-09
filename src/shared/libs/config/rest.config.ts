@@ -4,7 +4,8 @@ import { inject, injectable } from 'inversify';
 import { Config } from './config.interface.js';
 import { Logger } from '../logger/index.js';
 import { Component } from '../../types/index.js';
-import { configRestSchema, RestSchema } from './rest.schema.js';
+import { configRestSchema } from './rest.schema.js';
+import { RestSchema } from './index.js';
 
 @injectable()
 export class RestConfig implements Config<RestSchema> {
