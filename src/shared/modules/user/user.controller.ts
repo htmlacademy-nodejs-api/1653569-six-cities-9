@@ -1,8 +1,15 @@
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { StatusCodes } from 'http-status-codes';
 
-import { BaseController, HttpError, HttpMethod, ValidateDtoMiddleware } from '../../libs/rest/index.js';
+import {
+  BaseController,
+  HttpError,
+  HttpMethod,
+  UploadFileMiddleware,
+  ValidateDtoMiddleware,
+  ValidateObjectIdMiddleware
+} from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { CreateUserRequest } from './types/create-user-request.type.js';
@@ -42,6 +49,16 @@ export class UserController extends BaseController {
         new ValidateDtoMiddleware(LoginUserDto)
       ],
     });
+
+    this.addRoute({
+      path: UserRoute.AVATAR,
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
+      ]
+    });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
@@ -75,5 +92,9 @@ export class UserController extends BaseController {
       'Not implemented',
       'UserController',
     );
+  }
+
+  public async uploadAvatar(req: Request, res: Response) {
+    this.created(res, { filepath: req.file?.path });
   }
 }
