@@ -12,9 +12,17 @@ Content-Type: application/json
 {
   "title": "Nice, cozy, warm big bed apartment",
   "description": "Design interior in most sympathetic area!",
+  "createdDate": "2025-01-01",
   "city": "Paris",
   "previewImage": "preview.jpg",
-  "images": ["image-1.jpg", "image-2.jpg", "image-3.jpg"],
+  "images": [
+    "image-1.jpg",
+    "image-2.jpg",
+    "image-3.jpg",
+    "image-4.jpg",
+    "image-5.jpg",
+    "image-6.jpg"
+    ],
   "isPremium": true,
   "rating": 4,
   "type": "House",
@@ -22,12 +30,41 @@ Content-Type: application/json
   "maxAdults": 6,
   "price": 1560,
   "goods": ["Breakfast", "Air conditioning"],
-  "userId": "67bfaf27982ac03857fe3f38",
+  "userId": "67bfaf67982ac03877fe3f38",
   "commentCount": 7,
   "location": {
     "latitude": 48.85661,
     "longitude": 2.351499
   }
 }
+
+###
+
+# Получить оффер по идентификатору
+GET http://localhost:5000/offers/67c8574867d9cca16d9cdc88 HTTP/1.1
+
+###
+
+## Удалить оффер по идентификатору
+
+DELETE http://localhost:5000/offers/67bfaf67982ac03877fe3f4c HTTP/1.1
+
+###
+
+## Обновить оффер по идентификатору
+
+PATCH http://localhost:5000/offers/67c8574867d9cca16d9cdc88 HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "New amazing city",
+  "description": "New amazing description",
+  "price": 1700
+}
+
+###
+
+## Список комментариев к объявлению
+GET http://localhost:5000/offers/67c8574867d9cca16d9cdc88/comments HTTP/1.1
 
 ###

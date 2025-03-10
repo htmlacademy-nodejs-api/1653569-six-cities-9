@@ -1,8 +1,9 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { CityName } from '../../../types/city-name.enum.js';
 import { OfferType } from '../../../types/offer-type.enum.js';
 import { Goods } from '../../../types/goods.enum.js';
 import { Location } from '../../../types/location.type.js';
+import { UserRdo } from '../../user/rdo/user.rdo.js';
 
 export class OfferRdo {
   @Expose()
@@ -50,8 +51,9 @@ export class OfferRdo {
   @Expose()
   public goods: Goods[];
 
-  @Expose()
-  public userId: string;
+  @Expose({ name: 'userId'})
+  @Type(() => UserRdo)
+  public user: UserRdo;
 
   @Expose()
   public commentCount: number;
