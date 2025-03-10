@@ -39,6 +39,7 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    this.logger.info(`Offer updated: ${dto.title}`);
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, { new: true })
       .populate('userId')

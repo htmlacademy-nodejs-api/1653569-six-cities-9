@@ -3,13 +3,17 @@ export const Component = {
   Logger: Symbol(),
   Config: Symbol(),
   DatabaseClient: Symbol(),
-  UserService: Symbol(),
-  UserModel: Symbol(),
-  OfferService: Symbol(),
-  OfferModel: Symbol(),
-  CommentService: Symbol(),
-  CommentModel: Symbol(),
-  OfferController: Symbol(),
   ExceptionFilter: Symbol(),
+
+  UserModel: Symbol(),
+  UserService: Symbol(),
   UserController: Symbol(),
+
+  OfferModel: Symbol(),
+  OfferService: Symbol(),
+  OfferController: Symbol(),
+
+  CommentModel: Symbol(),
+  CommentService: Symbol(),
+  CommentController: Symbol(),
 } as const;
