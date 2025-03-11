@@ -1,6 +1,7 @@
 export const UserRoute = {
   REGISTER: '/register',
   LOGIN: '/login',
+  AVATAR: '/:userId/avatar',
 } as const;
 
 export const UserValidation = {

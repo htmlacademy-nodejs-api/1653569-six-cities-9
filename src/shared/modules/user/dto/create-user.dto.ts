@@ -16,7 +16,7 @@ export class CreateUserDto {
   public password: string;
 
   @IsUrl({}, { message: UserValidationMessage.avatarPath.invalidFormat })
-  public avatarPath?: string;
+  public avatarPath: string;
 
   @IsEnum(UserType, { message: UserValidationMessage.type.invalidFormat })
   public type: UserType;
