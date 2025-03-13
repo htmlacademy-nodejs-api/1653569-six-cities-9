@@ -38,4 +38,11 @@ Content-Type: image/png
 < D:/avatar.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
-##
+###
+
+## Проверить токен пользователя
+
+GET http://localhost:5000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3Y2ExMTIzMzhkYWZhMzhlMjZhNWNlZSIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDE3MTYwNTUsImV4cCI6MTc0MTg4ODg1NX0.JgBoPolDnWz89wDq8LrgMKCpbkK_btqtzYF_OJxHcWo
+
+###

@@ -3,12 +3,12 @@
 
 POST http://localhost:5000/comments HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3Y2ExMTIzMzhkYWZhMzhlMjZhNWNlZSIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDE3MTYwNTUsImV4cCI6MTc0MTg4ODg1NX0.JgBoPolDnWz89wDq8LrgMKCpbkK_btqtzYF_OJxHcWo
 
 {
   "comment": "Text new comment",
   "rating": 1,
-  "offerId": "67c8574867d9cca16d9cdc88",
-  "userId": "67c8574767d9cca16d9cdc7d"
+  "offerId": "67bfaf67982ac03877fe3f4f"
 }
 
 ###
