@@ -16,4 +16,7 @@ export const Component = {
   CommentModel: Symbol(),
   CommentService: Symbol(),
   CommentController: Symbol(),
+
+  AuthService: Symbol(),
+  AuthExceptionFilter: Symbol(),
 } as const;

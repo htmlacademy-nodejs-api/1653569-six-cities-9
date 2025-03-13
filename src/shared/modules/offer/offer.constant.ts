@@ -2,6 +2,8 @@ export const OfferRoute = {
   ROOT: '/',
   ID: '/:offerId',
   COMMENTS: '/:offerId/comments',
+  PREMIUM: '/:city/premium',
+  FAVORITES: '/favorites',
 } as const;
 
 export const OfferCount = {
