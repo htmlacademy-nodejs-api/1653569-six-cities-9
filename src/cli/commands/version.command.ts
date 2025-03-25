@@ -1,7 +1,9 @@
 import chalk from 'chalk';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { Command } from './command.interface.js';
+
+import { Command, CommandName } from '../types/index.js';
+import { ENCODING_DEFAULT } from '../../shared/constant/index.js';
 
 export class VersionCommand implements Command {
   constructor(
@@ -18,7 +20,7 @@ export class VersionCommand implements Command {
   }
 
   private readVersion(): string {
-    const jsonContent = readFileSync(resolve(this.filePath), {encoding: 'utf-8'});
+    const jsonContent = readFileSync(resolve(this.filePath), {encoding: ENCODING_DEFAULT});
     const importedContent: unknown = JSON.parse(jsonContent);
 
     if (!this.isPackageJSONConfig(importedContent)) {
@@ -29,7 +31,7 @@ export class VersionCommand implements Command {
   }
 
   public getName(): string {
-    return '--version';
+    return CommandName.Version;
   }
 
   public async execute(..._parameters: string[]): Promise<void> {

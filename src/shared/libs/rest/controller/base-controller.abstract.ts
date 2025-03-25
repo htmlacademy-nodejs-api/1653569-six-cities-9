@@ -7,7 +7,6 @@ import { Controller } from './controller.interface.js';
 import { Logger } from '../../logger/index.js';
 import { Route } from '../types/route.interface.js';
 
-
 @injectable()
 export abstract class BaseController implements Controller {
   private readonly DEFAULT_CONTENT_TYPE = 'application/json';
@@ -49,13 +48,5 @@ export abstract class BaseController implements Controller {
 
   public noContent<T>(res: Response, data: T): void {
     this.send(res, StatusCodes.NO_CONTENT, data);
-  }
-
-  public notFound<T>(res: Response, data: T): void {
-    this.send(res, StatusCodes.NOT_FOUND, data);
-  }
-
-  public notAllow<T>(res: Response, data: T): void {
-    this.send(res, StatusCodes.FORBIDDEN, data);
   }
 }

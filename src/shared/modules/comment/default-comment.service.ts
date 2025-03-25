@@ -2,30 +2,30 @@ import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
 
 import { CommentService } from './comment-service.interface.js';
-import { Component, SortType } from '../../types/index.js';
+import { Nullable, SortType } from '../../types/index.js';
 import { CommentEntity } from './comment.entity.js';
-import { CreateCommentDto } from './dto/create-comment.dto.js';
+import { CreateCommentDTO } from './dto/create-comment.dto.js';
 import { Logger } from '../../libs/logger/index.js';
-import { DEFAULT_COMMENT_COUNT } from './comment.constant.js';
+import { COMPONENT } from '../../constant/index.js';
+import { COMMENT } from './comment.constant.js';
 
 @injectable()
 export class DefaultCommentService implements CommentService {
   constructor(
-    @inject(Component.Logger) private readonly logger: Logger,
-    @inject(Component.CommentModel) private readonly commentModel: types.ModelType<CommentEntity>
+    @inject(COMPONENT.LOGGER) private readonly logger: Logger,
+    @inject(COMPONENT.COMMENT_MODEL) private readonly commentModel: types.ModelType<CommentEntity>
   ) {}
 
-  public async create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
-    const comment = await this.commentModel.create(dto);
+  public async create(dto: CreateCommentDTO, offerId: string): Promise<DocumentType<CommentEntity>> {
+    const result = await this.commentModel.create({ ...dto, offerId });
     this.logger.info(`New comment created: ${dto.comment}`);
-    return comment.populate('userId');
+
+    return result.populate('userId');
   }
 
-  public async findByOfferId(offerId: string, count?: number): Promise<DocumentType<CommentEntity>[]> {
-    const limit = count ?? DEFAULT_COMMENT_COUNT;
-
+  public async findByOfferId(offerId: string): Promise<Nullable<DocumentType<CommentEntity>>[]> {
     return this.commentModel
-      .find({ offerId }, {}, { limit })
+      .find({ offerId }, {}, { limit: COMMENT.COUNT.DEFAULT })
       .sort({ createdAt: SortType.Down })
       .populate('userId')
       .exec();
@@ -37,13 +37,5 @@ export class DefaultCommentService implements CommentService {
       .exec();
 
     return result.deletedCount;
-  }
-
-  public async getRatingOfferId(offerId: string): Promise<number> {
-    const comments = await this.commentModel.find({ offerId });
-    const commentsRating = comments.map(({ rating }) => rating);
-    const totalRating = commentsRating.reduce((total, rating) => total + rating, 0);
-
-    return totalRating / commentsRating.length;
   }
 }

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { Logger } from '../../logger/index.js';
-import { Component } from '../../../types/index.js';
+import { COMPONENT } from '../../../constant/index.js';
 import { HttpError } from '../errors/index.js';
 import { ExceptionFilter } from './exception-filter.interface.js';
 import { createErrorObject } from '../../../helpers/index.js';
@@ -11,7 +11,7 @@ import { createErrorObject } from '../../../helpers/index.js';
 @injectable()
 export class AppExceptionFilter implements ExceptionFilter {
   constructor(
-    @inject(Component.Logger) private readonly logger: Logger
+    @inject(COMPONENT.LOGGER) private readonly logger: Logger
   ) {
     this.logger.info('Register AppExceptionFilter');
   }

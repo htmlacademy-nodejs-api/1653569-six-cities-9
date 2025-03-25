@@ -1,8 +1,8 @@
 # Пользователи
 ## Создать нового пользователя
-
 POST http://localhost:5000/users/register HTTP/1.1
 Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZGM3YTM1M2M3NzAxM2E3NzEyMGY3MiIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDI5MDQ2MTMsImV4cCI6MTc0MzA3NzQxM30.KXdJzbr4kGyKKwLGREdt37tYbqIhuNkD0B93wyFDFdg
 
 {
   "name": "Jack",
@@ -15,7 +15,6 @@ Content-Type: application/json
 ###
 
 ## Авторизовать пользователя
-
 POST http://localhost:5000/users/login HTTP/1.1
 Content-Type: application/json
 
@@ -26,9 +25,35 @@ Content-Type: application/json
 
 ###
 
-## Отправить изображение
+## Проверить токен пользователя
+GET http://localhost:5000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZGM3YTM1M2M3NzAxM2E3NzEyMGY3MiIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDI5MDQ2MTMsImV4cCI6MTc0MzA3NzQxM30.KXdJzbr4kGyKKwLGREdt37tYbqIhuNkD0B93wyFDFdg
 
-POST http://localhost:5000/users/67bfaf67982ac03877fe3f38/avatar HTTP/1.1
+###
+
+## Получить список избранных офферов
+GET http://localhost:5000/users/favorites HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZGM3YTM1M2M3NzAxM2E3NzEyMGY3MiIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDI5MDQ2MTMsImV4cCI6MTc0MzA3NzQxM30.KXdJzbr4kGyKKwLGREdt37tYbqIhuNkD0B93wyFDFdg
+
+###
+
+## Добавить оффер в избранное
+POST http://localhost:5000/users/favorites/67dc78473c77013a77120f65 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZGM3YTM1M2M3NzAxM2E3NzEyMGY3MiIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDI5MDQ2MTMsImV4cCI6MTc0MzA3NzQxM30.KXdJzbr4kGyKKwLGREdt37tYbqIhuNkD0B93wyFDFdg
+
+###
+
+## Удалить оффер из избранного
+DELETE http://localhost:5000/users/favorites/67dc78473c77013a77120f65 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZGM3YTM1M2M3NzAxM2E3NzEyMGY3MiIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDI5MDQ2MTMsImV4cCI6MTc0MzA3NzQxM30.KXdJzbr4kGyKKwLGREdt37tYbqIhuNkD0B93wyFDFdg
+
+###
+
+## Отправить изображение
+POST http://localhost:5000/users/avatar/67bfaf67982ac03877fe3f38 HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -37,12 +62,3 @@ Content-Type: image/png
 
 < D:/avatar.png
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
-
-###
-
-## Проверить токен пользователя
-
-GET http://localhost:5000/users/login HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3Y2ExMTIzMzhkYWZhMzhlMjZhNWNlZSIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDE3MTYwNTUsImV4cCI6MTc0MTg4ODg1NX0.JgBoPolDnWz89wDq8LrgMKCpbkK_btqtzYF_OJxHcWo
-
-###

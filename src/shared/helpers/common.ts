@@ -1,6 +1,6 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 
-const ItemCount = {
+const ITEM_COUNT = {
   MIN: 0,
   MAX: 6,
 } as const;
@@ -8,7 +8,7 @@ const ItemCount = {
 const RATIO_VALUE = 0.5;
 
 export function generateRandomItemCount() {
-  return generateRandomValue(ItemCount.MIN, ItemCount.MAX);
+  return generateRandomValue(ITEM_COUNT.MIN, ITEM_COUNT.MAX);
 }
 
 export function generateRandomValue(min: number, max: number, numAfterDigit = 0) {
@@ -16,8 +16,8 @@ export function generateRandomValue(min: number, max: number, numAfterDigit = 0)
 }
 
 export function getRandomItems<T>(items: T[], isFixed: boolean = false): T[] {
-  const startPosition = !isFixed ? generateRandomValue(0, items.length - 1) : ItemCount.MIN;
-  const endPosition = !isFixed ? startPosition + generateRandomValue(startPosition, items.length) : ItemCount.MAX;
+  const startPosition = !isFixed ? generateRandomValue(0, items.length - 1) : ITEM_COUNT.MIN;
+  const endPosition = !isFixed ? startPosition + generateRandomValue(startPosition, items.length) : ITEM_COUNT.MAX;
   return items.slice(startPosition, endPosition);
 }
 
@@ -25,16 +25,16 @@ export function getRandomItem<T>(items: T[]):T {
   return items[generateRandomValue(0, items.length - 1)];
 }
 
-export function getRandomBoolean() {
-  return Math.random() > RATIO_VALUE;
+export function getRandomBoolean(isParam: boolean = true) {
+  return isParam ? Math.random() > RATIO_VALUE : false;
 }
 
 export function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : '';
 }
 
-export function fillDTO<T, V>(someDto: ClassConstructor<T>, plainObject: V) {
-  return plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
+export function fillDTO<T, V>(someDTO: ClassConstructor<T>, plainObject: V) {
+  return plainToInstance(someDTO, plainObject, { excludeExtraneousValues: true });
 }
 
 export function createErrorObject(message: string) {

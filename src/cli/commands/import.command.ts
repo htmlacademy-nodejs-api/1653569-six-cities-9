@@ -1,4 +1,4 @@
-import { Command } from './command.interface.js';
+import { Command, CommandName } from '../types/index.js';
 import { Offer } from '../../shared/types/index.js';
 import { Logger } from '../../shared/libs/logger/index.js';
 import { getMongoURI } from '../../shared/helpers/index.js';
@@ -6,13 +6,18 @@ import { DatabaseClient } from '../../shared/libs/database-client/database-clien
 import { MongoDatabaseClient } from '../../shared/libs/database-client/mongo.database-client.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 import { ConsoleLogger } from '../../shared/libs/logger/index.js';
-import { DefaultOfferService, OfferModel, OfferService } from '../../shared/modules/offer/index.js';
-import { DefaultUserService, UserModel, UserService } from '../../shared/modules/user/index.js';
-import { DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD } from './command.constant.js';
+import { DefaultOfferService, OfferService } from '../../shared/modules/offer/index.js';
+import { DefaultUserService, UserService } from '../../shared/modules/user/index.js';
+import { EventName } from '../types/event-name.enum.js';
+import { CommentModel, OfferModel, UserModel } from '../../shared/modules/index.js';
+import { CommentService, DefaultCommentService } from '../../shared/modules/comment/index.js';
+
+const DEFAULT_USER_PASSWORD = '123456';
 
 export class ImportCommand implements Command {
   private readonly userService: UserService;
   private readonly offerService: OfferService;
+  private readonly commentService: CommentService;
   private readonly databaseClient: DatabaseClient;
   private readonly logger: Logger;
   private salt: string;
@@ -22,8 +27,9 @@ export class ImportCommand implements Command {
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
     this.logger = new ConsoleLogger();
-    this.userService = new DefaultUserService(this.logger, UserModel);
-    this.offerService = new DefaultOfferService(this.logger, OfferModel);
+    this.commentService = new DefaultCommentService(this.logger, CommentModel);
+    this.offerService = new DefaultOfferService(this.logger, OfferModel, this.commentService);
+    this.userService = new DefaultUserService(this.logger, UserModel, this.offerService);
     this.databaseClient = new MongoDatabaseClient(this.logger);
   }
 
@@ -34,26 +40,23 @@ export class ImportCommand implements Command {
 
   private async saveOffer(offer: Offer) {
     const user = await this.userService.findOrCreate(
-      Object.assign({}, offer.author, { password: DEFAULT_USER_PASSWORD }),
+      Object.assign(offer.author, { password: DEFAULT_USER_PASSWORD }),
       this.salt
     );
 
     await this.offerService.create({
       title: offer.title,
       description: offer.description,
-      createdDate: offer.createdDate,
       city: offer.city,
       previewImage: offer.previewImage,
       images: offer.images,
       isPremium: offer.isPremium,
-      rating: offer.rating,
       type: offer.type,
       bedrooms: offer.bedrooms,
       maxAdults: offer.maxAdults,
       price: offer.price,
       goods: offer.goods,
       userId: user.id,
-      commentCount: offer.commentCount,
       location: offer.location
     });
   }
@@ -64,7 +67,7 @@ export class ImportCommand implements Command {
   }
 
   public getName(): string {
-    return '--import';
+    return CommandName.Import;
   }
 
   public async execute(
@@ -72,17 +75,18 @@ export class ImportCommand implements Command {
     login: string,
     password: string,
     host: string,
-    dbname: string,
+    port: string,
+    name: string,
     salt: string
   ): Promise<void> {
-    const uri = getMongoURI(login, password, host, DEFAULT_DB_PORT, dbname);
+    const uri = getMongoURI(login, password, host, port, name);
     this.salt = salt;
 
     await this.databaseClient.connect(uri);
 
     const fileReader = new TSVFileReader(filename.trim());
-    fileReader.on('line', this.onImportedOffer);
-    fileReader.on('end', this.onCompleteImport);
+    fileReader.on(EventName.Line, this.onImportedOffer);
+    fileReader.on(EventName.End, this.onCompleteImport);
 
     try {
       fileReader.read();

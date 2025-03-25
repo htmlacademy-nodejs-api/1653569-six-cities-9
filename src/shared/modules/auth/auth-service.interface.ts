@@ -1,6 +1,6 @@
-import { LoginUserDto, UserEntity } from '../user/index.js';
+import { LoginUserDTO, UserEntity } from '../user/index.js';
 
 export interface AuthService {
   authenticate(user: UserEntity): Promise<string>;
-  verify(dto: LoginUserDto): Promise<UserEntity>;
+  verify(dto: LoginUserDTO): Promise<UserEntity>;
 }

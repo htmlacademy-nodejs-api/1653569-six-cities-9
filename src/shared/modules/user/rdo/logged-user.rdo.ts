@@ -1,9 +1,9 @@
 import { Expose } from 'class-transformer';
 
-export class LoggedUserRdo {
+export class LoggedUserRDO {
   @Expose()
-  public email: string;
+  public email!: string;
 
   @Expose()
-  public token: string;
+  public token!: string;
 }

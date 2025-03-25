@@ -1,20 +1,20 @@
-import { CommentValidation } from '../comment.constant.js';
+import { COMMENT } from '../comment.constant.js';
 
-export const CommentValidationMessages = {
-  comment: {
-    minLength: `Minimum comment length must be ${CommentValidation.comment.minLength}`,
-    maxLength: `Maximum comment length must be ${CommentValidation.comment.maxLength}`
+export const COMMENT_VALIDATION_MESSAGES = {
+  TEXT: {
+    MIN_LENGTH: `Minimum comment length must be ${COMMENT.TEXT_LENGHT.MIN}}`,
+    MAX_LENGTH: `Maximum comment length must be ${COMMENT.TEXT_LENGHT.MAX}}`
   },
-  rating: {
-    minValue: `Minimum rating is ${CommentValidation.rating.min}`,
-    maxValue: `Maximum rating is ${CommentValidation.rating.max}`,
-    invalidFormat: 'Field rating must be an integer',
+  RATING: {
+    MIN_VALUE: `Minimum rating is ${COMMENT.RATING.MIN}`,
+    MAX_VALUE: `Maximum rating is ${COMMENT.RATING.MAX}`,
+    INVALID_FORMAT: 'Field rating must be an integer',
   },
-  offerId: {
-    invalidId: 'Field offerId must be a valid id',
+  OFFER_ID: {
+    INVALID_ID: 'Field offerId must be a valid id',
   },
-  userId: {
-    invalidId: 'Field userId must be a valid id',
+  USER_ID: {
+    INVALID_ID: 'Field userId must be a valid id',
   },
 } as const;
 

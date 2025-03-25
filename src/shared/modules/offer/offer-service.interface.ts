@@ -1,18 +1,19 @@
 import { DocumentType } from '@typegoose/typegoose';
 
-import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { CreateOfferDTO } from './dto/create-offer.dto.js';
 import { OfferEntity } from './offer.entity.js';
-import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { UpdateOfferDTO } from './dto/update-offer.dto.js';
 import { DocumentExists } from '../../libs/rest/index.js';
+import { Nullable } from '../../types/index.js';
 
 export interface OfferService extends DocumentExists {
-  create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
-  find(count?: number): Promise<DocumentType<OfferEntity>[]>;
-  findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
-  deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  findPremiumByCity(cityName: string): Promise<DocumentType<OfferEntity>[] | null>;
-  findFavoritesByUserId(userId: string): Promise<DocumentType<OfferEntity>[] | null>;
-  incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  create(dto: CreateOfferDTO): Promise<DocumentType<OfferEntity>>;
+  find(count: number, userId: string): Promise<DocumentType<OfferEntity>[]>;
+  findById(offerId: string, userId: string): Promise<Nullable<DocumentType<OfferEntity>>>;
+  findFavoritesByUserId(userId: string): Promise<DocumentType<OfferEntity>[]>;
+  deleteById(offerId: string): Promise<Nullable<DocumentType<OfferEntity>>>;
+  updateById(offerId: string, dto: UpdateOfferDTO): Promise<Nullable<DocumentType<OfferEntity>>>;
+  findPremiumByCity(city: string, userId: string): Promise<DocumentType<OfferEntity>[]>;
+  isOwnOffer(offerId: string, userId: string): Promise<boolean>;
   exists(documentId: string): Promise<boolean>;
 }

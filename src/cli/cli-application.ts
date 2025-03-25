@@ -1,11 +1,11 @@
-import { Command } from './commands/command.interface.js';
+import { Command, CommandName } from './types/index.js';
 import { CommandParser } from './command-parser.js';
 
 export class CLIApplication {
   private commands: Record<string, Command> = {};
 
   constructor(
-    private readonly defaultCommand: string = '--help'
+    private readonly defaultCommand: string = CommandName.Help
   ) {}
 
   public registerCommands(commandList: Command[]): void {

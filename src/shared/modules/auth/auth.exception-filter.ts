@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response, NextFunction } from 'express';
 
-import { Component } from '../../types/index.js';
+import { COMPONENT } from '../../constant/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { ExceptionFilter } from '../../libs/rest/index.js';
 import { BaseUserException } from './errors/index.js';
@@ -9,7 +9,7 @@ import { BaseUserException } from './errors/index.js';
 @injectable()
 export class AuthExceptionFilter implements ExceptionFilter {
   constructor(
-    @inject(Component.Logger) private readonly logger: Logger
+    @inject(COMPONENT.LOGGER) private readonly logger: Logger
   ) {
     this.logger.info('Register AuthExceptionFilter');
   }
