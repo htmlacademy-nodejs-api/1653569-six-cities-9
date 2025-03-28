@@ -1,12 +1,13 @@
-import { IsEmail, MaxLength, MinLength } from 'class-validator';
-import { UserValidationMessage } from './user-validation.messages.js';
-import { UserValidation } from '../user.constant.js';
+import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import { USER_VALIDATION_MESSAGE } from './user-validation.messages.js';
+import { USER } from '../user.constant.js';
 
-export class LoginUserDto {
-  @IsEmail({}, { message: UserValidationMessage.email.invalidFormat })
-  public email: string;
+export class LoginUserDTO {
+  @IsEmail({}, { message: USER_VALIDATION_MESSAGE.EMAIL.INVALID_FORMAT })
+  public email!: string;
 
-  @MinLength(UserValidation.password.minLength, { message: UserValidationMessage.password.minLength })
-  @MaxLength(UserValidation.password.maxLength, { message: UserValidationMessage.password.maxLength })
-  public password: string;
+  @IsString()
+  @MinLength(USER.NAME_LENGTH.MIN, { message: USER_VALIDATION_MESSAGE.PASSWORD.MIN_LENGTH })
+  @MaxLength(USER.NAME_LENGTH.MAX, { message: USER_VALIDATION_MESSAGE.PASSWORD.MAX_LENGTH })
+  public password!: string;
 }

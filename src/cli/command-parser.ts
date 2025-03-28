@@ -1,4 +1,4 @@
-type ParsedCommand = Record<string, string[]>
+import { ParsedCommand } from './types/index.js';
 
 export class CommandParser {
   static parse(cliArguments: string[]): ParsedCommand {

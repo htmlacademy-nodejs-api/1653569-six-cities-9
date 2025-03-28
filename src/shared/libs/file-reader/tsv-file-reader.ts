@@ -2,6 +2,8 @@ import EventEmitter from 'node:events';
 import { createReadStream } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
 import { User, Offer, OfferType, CityName, UserType, Location, Goods } from '../../types/index.js';
+import { DECIMAL_RADIX, ENCODING_DEFAULT, SEPARATOR } from '../../constant/index.js';
+import { EventName } from '../../../cli/types/index.js';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
   private CHUNK_SIZE = 16384;
@@ -22,16 +24,14 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       images,
       isPremium,
       isFavorite,
-      rating,
       type,
       bedrooms,
       maxAdults,
       price,
       goods,
       user,
-      commentCount,
       location,
-    ] = line.split('\t');
+    ] = line.split(SEPARATOR.TAB);
 
     return {
       title,
@@ -42,24 +42,22 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       images: this.parseStringToArray<string[]>(images),
       isPremium: this.parseToBoolean(isPremium),
       isFavorite: this.parseToBoolean(isFavorite),
-      rating: this.parseStringToNumber(rating),
       type: type as OfferType,
       bedrooms: this.parseStringToNumber(bedrooms),
       maxAdults: this.parseStringToNumber(maxAdults),
       price: this.parseStringToNumber(price),
       goods: this.parseStringToArray<Goods[]>(goods),
       author: this.parseAuthor(user),
-      commentCount: this.parseStringToNumber(commentCount),
       location: this.parseLocation(location),
     };
   }
 
   private parseStringToArray<T>(value: string): T {
-    return value.split(';') as T;
+    return value.split(SEPARATOR.SEMICOLON) as T;
   }
 
   private parseStringToNumber(value: string): number {
-    return Number.parseInt(value, 10);
+    return Number.parseInt(value, DECIMAL_RADIX);
   }
 
   private parseToBoolean(value: string): boolean {
@@ -67,7 +65,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   }
 
   private parseLocation(location: string): Location {
-    const [latitude, longitude] = location.split(';');
+    const [latitude, longitude] = location.split(SEPARATOR.SEMICOLON);
     return {
       latitude: parseFloat(latitude),
       longitude: parseFloat(longitude),
@@ -75,14 +73,14 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   }
 
   private parseAuthor(user: string): User {
-    const [name, email, avatarPath, type] = user.split(';');
+    const [name, email, avatarPath, type] = user.split(SEPARATOR.SEMICOLON);
     return {name, email, avatarPath, type: type as UserType};
   }
 
   public async read(): Promise<void> {
     const readStream = createReadStream(this.filename, {
       highWaterMark: this.CHUNK_SIZE,
-      encoding: 'utf-8',
+      encoding: ENCODING_DEFAULT,
     });
 
     let remainingData = '';
@@ -92,18 +90,18 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     for await (const chunk of readStream) {
       remainingData += chunk.toString();
 
-      while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
+      while ((nextLinePosition = remainingData.indexOf(SEPARATOR.ROW)) >= 0) {
         const completeRow = remainingData.slice(0, nextLinePosition + 1);
         remainingData = remainingData.slice(++nextLinePosition);
         importedRowCount++;
 
         const parsedOffer = this.parseLineToOffer(completeRow);
         await new Promise((resolve) => {
-          this.emit('line', parsedOffer, resolve);
+          this.emit(EventName.Line, parsedOffer, resolve);
         });
       }
     }
 
-    this.emit('end', importedRowCount);
+    this.emit(EventName.End, importedRowCount);
   }
 }

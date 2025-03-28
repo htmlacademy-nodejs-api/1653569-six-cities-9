@@ -15,13 +15,11 @@ export type Offer = {
   images: string[];
   isPremium: boolean;
   isFavorite: boolean;
-  rating: number;
   type: OfferType;
   bedrooms: number;
   maxAdults: number;
   price: number;
   goods: Goods[];
   author: User;
-  commentCount: number;
   location: Location;
 }

@@ -1,94 +1,89 @@
+import { Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
   IsBoolean,
-  IsDateString,
   IsEnum,
   IsInt,
   IsObject,
   IsOptional,
+  IsString,
   IsUrl,
   Max,
   MaxLength,
   Min,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
 
-import { OfferValidationMessage } from './offer-validation.messages.js';
-import { CityName, Goods, Location, OfferType } from '../../../types/index.js';
-import { OfferValidation } from '../offer.constant.js';
+import { OFFER } from '../offer.constant.js';
+import { OFFER_VALIDATION_MESSAGE } from './offer-validation.messages.js';
+import { CityName, Goods, OfferType } from '../../../types/index.js';
+import { LocationDTO } from './location.dto.js';
 
-export class UpdateOfferDto {
+export class UpdateOfferDTO {
   @IsOptional()
-  @MinLength(OfferValidation.title.minLength, { message: OfferValidationMessage.title.minLength })
-  @MaxLength(OfferValidation.title.maxLength, { message: OfferValidationMessage.title.maxLength })
+  @IsString()
+  @MinLength(OFFER.TITLE_LENGTH.MIN, { message: OFFER_VALIDATION_MESSAGE.TITLE.MIN_LENGTH })
+  @MaxLength(OFFER.TITLE_LENGTH.MAX, { message: OFFER_VALIDATION_MESSAGE.TITLE.MAX_LENGTH })
   public title?: string;
 
   @IsOptional()
-  @MinLength(OfferValidation.description.minLength, { message: OfferValidationMessage.description.minLength })
-  @MaxLength(OfferValidation.description.maxLength, { message: OfferValidationMessage.description.maxLength })
+  @IsString()
+  @MinLength(OFFER.DESCRIPTION_LENGTH.MIN, { message: OFFER_VALIDATION_MESSAGE.DESCRIPTION.MIN_LENGTH })
+  @MaxLength(OFFER.DESCRIPTION_LENGTH.MAX, { message: OFFER_VALIDATION_MESSAGE.DESCRIPTION.MAX_LENGTH })
   public description?: string;
 
   @IsOptional()
-  @IsDateString({}, { message: OfferValidationMessage.createdDate.invalidFormat })
-  public createdDate?: Date;
-
-  @IsOptional()
-  @IsEnum(CityName, { message: OfferValidationMessage.city.invalidFormat })
+  @IsEnum(CityName, { message: OFFER_VALIDATION_MESSAGE.CITY.INVALID_FORMAT })
   public city?: CityName;
 
   @IsOptional()
-  @IsUrl({}, { message: OfferValidationMessage.previewImage.invalidFormat })
+  @IsUrl({}, { message: OFFER_VALIDATION_MESSAGE.PREVIEW_IMAGE.INVALID_FORMAT })
   public previewImage?: string;
 
   @IsOptional()
-    @IsArray({ message: OfferValidationMessage.goods.invalidFormat })
-    @ArrayMinSize(OfferValidation.images.count, { message: OfferValidationMessage.images.invalidArrayCount })
-    @ArrayMaxSize(OfferValidation.images.count, { message: OfferValidationMessage.images.invalidArrayCount })
-    @IsUrl({}, { each: true, message: OfferValidationMessage.images.invalidFormatItem })
+  @IsArray({ message: OFFER_VALIDATION_MESSAGE.IMAGES.INVALID_FORMAT })
+  @ArrayMinSize(OFFER.COUNT.IMAGES, { message: OFFER_VALIDATION_MESSAGE.IMAGES.INVALID_ARRAY_COUNT })
+  @ArrayMaxSize(OFFER.COUNT.IMAGES, { message: OFFER_VALIDATION_MESSAGE.IMAGES.INVALID_ARRAY_COUNT })
+  @IsUrl({}, { each: true, message: OFFER_VALIDATION_MESSAGE.IMAGES.INVALID_FORMAT_ITEM })
   public images?: string[];
 
   @IsOptional()
-  @IsBoolean({ message: OfferValidationMessage.isPremium.invalidFormat })
+  @IsBoolean({ message: OFFER_VALIDATION_MESSAGE.IS_PREMIUM.INVALID_FORMAT })
   public isPremium?: boolean;
 
   @IsOptional()
-  @IsInt({ message: OfferValidationMessage.rating.invalidFormat })
-  public rating?: number;
-
-  @IsOptional()
-  @IsEnum(OfferType, { message: OfferValidationMessage.type.invalidFormat })
+  @IsEnum(OfferType, { message: OFFER_VALIDATION_MESSAGE.TYPE.INVALID_FORMAT })
   public type?: OfferType;
 
   @IsOptional()
-  @IsInt({ message: OfferValidationMessage.bedrooms.invalidFormat })
-  @Min(OfferValidation.bedrooms.min, { message: OfferValidationMessage.bedrooms.minValue })
-  @Max(OfferValidation.bedrooms.max, { message: OfferValidationMessage.bedrooms.maxValue })
+  @IsInt({ message: OFFER_VALIDATION_MESSAGE.BEDROOMS.INVALID_FORMAT })
+  @Min(OFFER.BEDROOMS.MIN, { message: OFFER_VALIDATION_MESSAGE.BEDROOMS.MIN_VALUE })
+  @Max(OFFER.BEDROOMS.MAX, { message: OFFER_VALIDATION_MESSAGE.BEDROOMS.MAX_VALUE })
   public bedrooms?: number;
 
   @IsOptional()
-  @IsInt({ message: OfferValidationMessage.maxAdults.invalidFormat })
-  @Min(OfferValidation.maxAdults.min, { message: OfferValidationMessage.maxAdults.minValue })
-  @Max(OfferValidation.maxAdults.max, { message: OfferValidationMessage.maxAdults.maxValue })
+  @IsInt({ message: OFFER_VALIDATION_MESSAGE.MAX_ADULTS.INVALID_FORMAT })
+  @Min(OFFER.MAX_ADULTS.MIN, { message: OFFER_VALIDATION_MESSAGE.MAX_ADULTS.MIN_VALUE })
+  @Max(OFFER.MAX_ADULTS.MAX, { message: OFFER_VALIDATION_MESSAGE.MAX_ADULTS.MAX_VALUE })
   public maxAdults?: number;
 
   @IsOptional()
-  @IsInt({ message: OfferValidationMessage.price.invalidFormat })
-  @Min(OfferValidation.price.min, { message: OfferValidationMessage.price.minValue })
-  @Max(OfferValidation.price.max, { message: OfferValidationMessage.price.maxValue })
+  @IsInt({ message: OFFER_VALIDATION_MESSAGE.PRICE.INVALID_FORMAT })
+  @Min(OFFER.PRICE.MIN, { message: OFFER_VALIDATION_MESSAGE.PRICE.MIN_VALUE })
+  @Max(OFFER.PRICE.MAX, { message: OFFER_VALIDATION_MESSAGE.PRICE.MAX_VALUE })
   public price?: number;
 
   @IsOptional()
-  @IsArray({ message: OfferValidationMessage.goods.invalidFormat })
-  @IsEnum(Goods, { each: true, message: OfferValidationMessage.goods.invalidFormatItem })
+  @IsArray({ message: OFFER_VALIDATION_MESSAGE.GOODS.INVALID_FORMAT })
+  @IsEnum(Goods, { each: true, message: OFFER_VALIDATION_MESSAGE.GOODS.INVALID_FORMAT_ITEM })
   public goods?: Goods[];
 
   @IsOptional()
-  @IsInt({ message: OfferValidationMessage.commentCount.invalidFormat })
-  public commentCount?: number;
-
-  @IsOptional()
-  @IsObject({ message: OfferValidationMessage.location.invalidFormat })
-  public location?: Location;
+  @ValidateNested()
+  @IsObject({ message: OFFER_VALIDATION_MESSAGE.LOCATION.INVALID_FORMAT })
+  @Type(() => LocationDTO)
+  public location?: LocationDTO;
 }

@@ -1,13 +1,13 @@
 import {
   defaultClasses,
-  getModelForClass,
   modelOptions,
   prop,
-  Ref
+  Ref,
+  Severity
 } from '@typegoose/typegoose';
 
 import { CityName, Goods, Location, OfferType } from '../../types/index.js';
-import { UserEntity } from '../user/index.js';
+import { UserEntity } from '../user/user.entity.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
@@ -16,6 +16,9 @@ export interface OfferEntity extends defaultClasses.Base {}
   schemaOptions: {
     collection: 'offers',
     timestamps: true
+  },
+  options: {
+    allowMixed: Severity.ALLOW,
   }
 })
 
@@ -33,17 +36,11 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public previewImage!: string;
 
-  @prop({ required: true })
+  @prop({ type: () => [String], required: true })
   public images!: string[];
 
   @prop({ required: true })
   public isPremium!: boolean;
-
-  @prop({ default: false, required: true})
-  public isFavorite!: boolean;
-
-  @prop({ required: true })
-  public rating!: number;
 
   @prop({ type: () => String, enum: OfferType, required: true })
   public type!: OfferType;
@@ -57,17 +54,18 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public price!: number;
 
+  @prop({ default: 0 })
+  public commentCount!: number;
+
+  @prop({ default: null })
+  public rating!: number;
+
   @prop({ type: () => String, enum: Goods, required: true })
   public goods!: Goods[];
 
-  @prop({ ref: UserEntity, required: true })
+  @prop({ ref: () => UserEntity, required: true })
   public userId!: Ref<UserEntity>;
-
-  @prop({ default: 0 })
-  public commentCount!: number;
 
   @prop({ required: true })
   public location!: Location;
 }
-
-export const OfferModel = getModelForClass(OfferEntity);

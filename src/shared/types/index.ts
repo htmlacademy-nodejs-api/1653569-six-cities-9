@@ -8,6 +8,6 @@ export { OfferType } from './offer-type.enum.js';
 export { User } from './user.type.js';
 export { UserType } from './user-type.enum.js';
 export { SortType } from './sort-type.enum.js';
-export { Component } from './component.constant.js';
+export { Nullable } from './nullable.type.js';
 
 export { MockServerData } from './mock-server-data.type.js';

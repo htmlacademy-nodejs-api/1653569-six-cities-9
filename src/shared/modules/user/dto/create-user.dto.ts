@@ -1,23 +1,27 @@
-import { IsEmail, IsEnum, IsUrl, MaxLength, MinLength } from 'class-validator';
+import { IsDefined, IsEmail, IsEnum, IsOptional, IsString, IsUrl, MaxLength, MinLength } from 'class-validator';
 import { UserType } from '../../../types/index.js';
-import { UserValidation } from '../user.constant.js';
-import { UserValidationMessage } from './user-validation.messages.js';
+import { USER } from '../user.constant.js';
+import { USER_VALIDATION_MESSAGE } from './user-validation.messages.js';
 
-export class CreateUserDto {
-  @MinLength(UserValidation.name.minLength, { message: UserValidationMessage.name.minLength })
-  @MaxLength(UserValidation.name.maxLength, { message: UserValidationMessage.name.maxLength })
-  public name: string;
+export class CreateUserDTO {
+  @IsString()
+  @MinLength(USER.NAME_LENGTH.MIN, { message: USER_VALIDATION_MESSAGE.NAME.MAX_LENGTH })
+  @MaxLength(USER.NAME_LENGTH.MAX, { message: USER_VALIDATION_MESSAGE.NAME.MAX_LENGTH })
+  public name!: string;
 
-  @IsEmail({}, { message: UserValidationMessage.email.invalidFormat })
-  public email: string;
+  @IsDefined()
+  @IsEmail({}, { message: USER_VALIDATION_MESSAGE.EMAIL.INVALID_FORMAT })
+  public email!: string;
 
-  @MinLength(UserValidation.password.minLength, { message: UserValidationMessage.password.minLength })
-  @MaxLength(UserValidation.password.maxLength, { message: UserValidationMessage.password.maxLength })
-  public password: string;
+  @IsString()
+  @MinLength(USER.PASSWORD_LENGTH.MIN, { message: USER_VALIDATION_MESSAGE.PASSWORD.MIN_LENGTH })
+  @MaxLength(USER.PASSWORD_LENGTH.MAX, { message: USER_VALIDATION_MESSAGE.PASSWORD.MAX_LENGTH })
+  public password!: string;
 
-  @IsUrl({}, { message: UserValidationMessage.avatarPath.invalidFormat })
-  public avatarPath: string;
+  @IsOptional()
+  @IsUrl({}, { message: USER_VALIDATION_MESSAGE.AVATAR_PATH.INVALID_FORMAT })
+  public avatarPath!: string;
 
-  @IsEnum(UserType, { message: UserValidationMessage.type.invalidFormat })
-  public type: UserType;
+  @IsEnum(UserType, { message: USER_VALIDATION_MESSAGE.TYPE.INVALID_FORMAT })
+  public type!: UserType;
 }

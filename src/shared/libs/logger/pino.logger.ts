@@ -4,24 +4,33 @@ import { Logger as PinoInstance, pino, transport } from 'pino';
 
 import { Logger } from './logger.interface.js';
 
+const LOG_FILE_PATH = 'logs/rest.log';
+
+const TRANSPORT_OPTION = {
+  FILE: 'pino/file',
+  LEVEL: {
+    DEBUG: 'debug',
+    INFO: 'info',
+  }
+} as const;
+
 @injectable()
 export class PinoLogger implements Logger {
   private readonly logger: PinoInstance;
 
   constructor() {
-    const logFilePath = 'logs/rest.log';
-    const destination = resolve(logFilePath);
+    const destination = resolve(LOG_FILE_PATH);
     const multiTransport = transport({
       targets: [
         {
-          target: 'pino/file',
+          target: TRANSPORT_OPTION.FILE,
           options: { destination },
-          level: 'debug'
+          level: TRANSPORT_OPTION.LEVEL.DEBUG,
         },
         {
-          target: 'pino/file',
+          target: TRANSPORT_OPTION.FILE,
           options: {},
-          level: 'info',
+          level: TRANSPORT_OPTION.LEVEL.INFO,
         }
       ],
     });

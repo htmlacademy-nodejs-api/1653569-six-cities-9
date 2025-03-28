@@ -1,13 +1,17 @@
 import { createWriteStream, WriteStream } from 'node:fs';
 import { FileWriter } from './file-writer.interface.js';
+import { ENCODING_DEFAULT } from '../../constant/index.js';
+
+const FLAG_OPTION = 'w';
+const EVENT_NAME = 'drain';
 
 export class TSVFileWriter implements FileWriter {
   private stream: WriteStream;
 
   constructor(filename: string) {
     this.stream = createWriteStream(filename, {
-      flags: 'w',
-      encoding: 'utf-8',
+      flags: FLAG_OPTION,
+      encoding: ENCODING_DEFAULT,
       autoClose: true,
     });
   }
@@ -17,7 +21,7 @@ export class TSVFileWriter implements FileWriter {
 
     if (!writeSuccess) {
       return new Promise((resolve) => {
-        this.stream.once('drain', () => resolve(true));
+        this.stream.once(EVENT_NAME, () => resolve(true));
       });
     }
 

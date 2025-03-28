@@ -1,16 +1,13 @@
-export const DEFAULT_COMMENT_COUNT = 50;
-
-export const CommentRoute = {
-  ROOT: '/',
-} as const;
-
-export const CommentValidation = {
-  comment: {
-    minLength: 5,
-    maxLength: 1024
+export const COMMENT = {
+  TEXT_LENGHT: {
+    MIN: 5,
+    MAX: 1024
   },
-  rating: {
-    min: 1,
-    max: 5,
+  RATING: {
+    MIN: 1,
+    MAX: 5,
+  },
+  COUNT: {
+    DEFAULT: 50
   }
-};
+} as const;

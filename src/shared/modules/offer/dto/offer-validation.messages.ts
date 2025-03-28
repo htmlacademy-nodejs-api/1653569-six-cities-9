@@ -1,67 +1,66 @@
 import { CityName, Goods, OfferType } from '../../../types/index.js';
-import { OfferValidation } from '../offer.constant.js';
+import { OFFER } from '../offer.constant.js';
 
-export const OfferValidationMessage = {
-  title: {
-    minLength: `Minimum title length must be ${OfferValidation.title.minLength}`,
-    maxLength: `Maximum title length must be ${OfferValidation.title.maxLength}`,
+export const OFFER_VALIDATION_MESSAGE = {
+  TITLE: {
+    MIN_LENGTH: `Minimum title length must be ${OFFER.TITLE_LENGTH.MIN}`,
+    MAX_LENGTH: `Maximum title length must be ${OFFER.TITLE_LENGTH.MAX}`,
   },
-  description: {
-    minLength: `Minimum description length must be ${OfferValidation.description.minLength}`,
-    maxLength: `Maximum description length must be ${OfferValidation.description.maxLength}`,
+  DESCRIPTION: {
+    MIN_LENGTH: `Minimum description length must be ${OFFER.DESCRIPTION_LENGTH.MIN}}`,
+    MAX_LENGTH: `Maximum description length must be ${OFFER.DESCRIPTION_LENGTH.MAX}`,
   },
-  createdDate: {
-    invalidFormat: 'Field createdDate must be a valid ISO date',
+  CREATED_DATE: {
+    INVALID_FORMAT: 'Field createdDate must be a valid ISO date',
   },
-  city: {
-    invalidFormat: `Field city must be an one of ${Object.values(CityName).join(', ')}`,
+  CITY: {
+    INVALID_FORMAT: `Field city must be an one of: ${Object.values(CityName).join(', ')}`,
   },
-  previewImage: {
-    invalidFormat: 'Field previewImage must be valid url',
+  PREVIEW_IMAGE: {
+    INVALID_FORMAT: 'Field previewImage must be valid url',
   },
-  images: {
-    invalidFormat: 'Field images must be an array',
-    invalidArrayCount: `Field images must be an array of ${OfferValidation.images.count} items`,
-    invalidFormatItem: 'Each item images must be a valid url'
+  IMAGES: {
+    INVALID_FORMAT: 'Field images must be an array',
+    INVALID_ARRAY_COUNT: `Field images must be an array of ${OFFER.COUNT.IMAGES} items`,
+    INVALID_FORMAT_ITEM: 'Each item images must be a valid url'
   },
-  isPremium: {
-    invalidFormat: 'Field isPremium must be a boolean',
+  IS_PREMIUM: {
+    INVALID_FORMAT: 'Field isPremium must be a boolean',
   },
-  type: {
-    invalidFormat: 'Field goods must be an array',
-    invalidFormatItem: `Field type must be an one of ${Object.values(OfferType).join(', ')}`
+  TYPE: {
+    INVALID_FORMAT: `Field type must be an one of: ${Object.values(OfferType).join(', ')}`
   },
-  bedrooms: {
-    minValue: `Minimum quantity bedrooms is ${OfferValidation.bedrooms.min}`,
-    maxValue: `Maximum quantity bedrooms is ${OfferValidation.bedrooms.max}`,
-    invalidFormat: 'Field bedrooms must be an integer',
+  BEDROOMS: {
+    MIN_VALUE: `Minimum quantity bedrooms is ${OFFER.BEDROOMS.MIN}`,
+    MAX_VALUE: `Maximum quantity bedrooms is ${OFFER.BEDROOMS.MAX}`,
+    INVALID_FORMAT: 'Field bedrooms must be an integer',
   },
-  maxAdults: {
-    minValue: `Minimum quantity adults is ${OfferValidation.maxAdults.min}`,
-    maxValue: `Maximum quantity adults is ${OfferValidation.maxAdults.max}`,
-    invalidFormat: 'Field maxAdults must be an integer',
+  MAX_ADULTS: {
+    MIN_VALUE: `Minimum quantity adults is ${OFFER.MAX_ADULTS.MIN}`,
+    MAX_VALUE: `Maximum quantity adults is ${OFFER.MAX_ADULTS.MAX}`,
+    INVALID_FORMAT: 'Field maxAdults must be an integer',
   },
-  price: {
-    minValue: `Minimum price is ${OfferValidation.price.min}`,
-    maxValue: `Maximum price is ${OfferValidation.price.max}`,
-    invalidFormat: 'Field price must be an integer',
+  PRICE: {
+    MIN_VALUE: `Minimum price is ${OFFER.PRICE.MIN}`,
+    MAX_VALUE: `Maximum price is ${OFFER.PRICE.MAX}`,
+    INVALID_FORMAT: 'Field price must be an integer',
   },
-  goods: {
-    invalidFormat: 'Field goods must be an array',
-    invalidFormatItem: `Field goods must be an one of ${Object.values(Goods).join(', ')}`
+  GOODS: {
+    INVALID_FORMAT: 'Field goods must be an array',
+    INVALID_FORMAT_ITEM: `Field goods must be an one of: ${Object.values(Goods).join(', ')}`
   },
-  userId: {
-    invalidId: 'Field userId must be a valid id',
+  USER_ID: {
+    INVALID_ID: 'Field userId must be a valid id',
   },
-  commentCount: {
-    invalidFormat: 'Field commentCount must be an integer',
+  COMMENT_COUNT: {
+    INVALID_FORMAT: 'Field commentCount must be an integer',
   },
-  location: {
-    invalidFormat: 'Field location must be an object {latitude: number, longitude: number}',
+  LOCATION: {
+    INVALID_FORMAT: 'Field location must be an object {latitude: number, longitude: number}',
   },
-  rating: {
-    minValue: 'Minimum rating is 1', //temp
-    maxValue: 'Maximum rating is 5', //temp
-    invalidFormat: 'Field rating must be an integer', //temp
+  RATING: {
+    MIN_VALUE: 'Minimum rating is 1',
+    MAX_VALUE: 'Maximum rating is 5',
+    INVALID_FORMAT: 'Field rating must be an integer',
   },
 } as const;

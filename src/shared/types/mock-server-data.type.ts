@@ -1,4 +1,4 @@
-import { City, OfferType, Goods } from './index.js';
+import { City, OfferType, Goods, UserType } from './index.js';
 
 export type MockServerData = {
   titles: string[];
@@ -10,6 +10,5 @@ export type MockServerData = {
   authors: string[];
   emails: string[];
   avatarPaths: string[];
-  passwords: string[];
-  userTypes: string[];
+  userTypes: UserType[];
 };

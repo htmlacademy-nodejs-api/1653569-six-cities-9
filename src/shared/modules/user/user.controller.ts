@@ -4,40 +4,56 @@ import { StatusCodes } from 'http-status-codes';
 
 import {
   BaseController,
+  DocumentExistsMiddleware,
   HttpError,
   HttpMethod,
+  PrivateRouteMiddleware,
   UploadFileMiddleware,
-  ValidateDtoMiddleware,
+  ValidateDTOMiddleware,
   ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
-import { Component } from '../../types/index.js';
+import { COMPONENT } from '../../constant/index.js';
 import { CreateUserRequest } from './types/create-user-request.type.js';
 import { LoginUserRequest } from './types/login-user-request.type.js';
 import { UserService } from './user-service.interface.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
-import { UserRdo } from './rdo/user.rdo.js';
-import { CreateUserDto } from './dto/create-user.dto.js';
-import { LoginUserDto } from './dto/login-user.dto.js';
+import { CreateUserDTO, LoginUserDTO, LoggedUserRDO, UserRDO } from './index.js';
 import { UserRoute } from './user.constant.js';
+import { AuthService } from '../auth/index.js';
+import { ParamOfferId } from '../offer/types/param-offerid.type.js';
+import { IdOfferRDO, OfferService, ShortOfferRDO } from '../offer/index.js';
+import { TokenExistsMiddleware } from '../../libs/rest/middleware/token-exists.middleware.js';
 
 @injectable()
 export class UserController extends BaseController {
   constructor(
-    @inject(Component.Logger) protected readonly logger: Logger,
-    @inject(Component.UserService) private readonly userService: UserService,
-    @inject(Component.Config) private readonly configService: Config<RestSchema>,
+    @inject(COMPONENT.LOGGER) protected readonly logger: Logger,
+    @inject(COMPONENT.CONFIG) private readonly configService: Config<RestSchema>,
+    @inject(COMPONENT.USER_SERVICE) private readonly userService: UserService,
+    @inject(COMPONENT.OFFER_SERVICE) private readonly offerService: OfferService,
+    @inject(COMPONENT.AUTH_SERVICE) private readonly authService: AuthService,
   ) {
     super(logger);
     this.logger.info('Register routes for UserController...');
+
+    this.addRoute({
+      path: UserRoute.LOGIN,
+      method: HttpMethod.Get,
+      handler: this.checkAuthenticate,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
+    });
 
     this.addRoute({
       path: UserRoute.REGISTER,
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
-        new ValidateDtoMiddleware(CreateUserDto)
+        new TokenExistsMiddleware(),
+        new ValidateDTOMiddleware(CreateUserDTO)
       ],
     });
 
@@ -46,7 +62,38 @@ export class UserController extends BaseController {
       method: HttpMethod.Post,
       handler: this.login,
       middlewares: [
-        new ValidateDtoMiddleware(LoginUserDto)
+        new ValidateDTOMiddleware(LoginUserDTO)
+      ],
+    });
+
+    this.addRoute({
+      path: UserRoute.FAVORITES,
+      method: HttpMethod.Get,
+      handler: this.showFavorites,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
+    });
+
+    this.addRoute({
+      path: UserRoute.FAVORITES_ID,
+      method: HttpMethod.Post,
+      handler: this.addFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+      ],
+    });
+
+    this.addRoute({
+      path: UserRoute.FAVORITES_ID,
+      method: HttpMethod.Delete,
+      handler: this.deleteFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
     });
 
@@ -55,7 +102,7 @@ export class UserController extends BaseController {
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
-        new ValidateObjectIdMiddleware('userId'),
+        new PrivateRouteMiddleware(),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
       ]
     });
@@ -73,25 +120,43 @@ export class UserController extends BaseController {
     }
 
     const result = await this.userService.create(body, this.configService.get('SALT'));
-    this.created(res, fillDTO(UserRdo, result));
+    this.created(res, fillDTO(UserRDO, result));
   }
 
-  public async login({ body }: LoginUserRequest, _res: Response): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
+  public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
+    const user = await this.authService.verify(body);
+    const token = await this.authService.authenticate(user);
+    this.ok(res, fillDTO(LoggedUserRDO, { email: user.email, token }));
+  }
 
-    if (!existsUser) {
+  public async checkAuthenticate({ tokenPayload }: Request, res: Response) {
+    const foundedUser = await this.userService.findByEmail(tokenPayload.email);
+    this.ok(res, fillDTO(UserRDO, foundedUser));
+  }
+
+  public async showFavorites({ tokenPayload }: Request, res: Response): Promise<void> {
+    const result = await this.userService.getFavorites(tokenPayload.id);
+    this.ok(res, fillDTO(ShortOfferRDO, result));
+  }
+
+  public async addFavorite({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const favorites = await this.userService.getFavorites(tokenPayload.id);
+
+    if (favorites.map((item) => item._id.toString()).includes(params.offerId)) {
       throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found.`,
+        StatusCodes.CONFLICT,
+        `Offer ${params.offerId} is already in favorites`,
         'UserController',
       );
     }
 
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController',
-    );
+    const result = await this.userService.addFavorite(tokenPayload.id, params.offerId);
+    this.ok(res, fillDTO(IdOfferRDO, result));
+  }
+
+  public async deleteFavorite({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const result = await this.userService.deleteFavorite(tokenPayload.id, params.offerId);
+    this.ok(res, fillDTO(IdOfferRDO, result));
   }
 
   public async uploadAvatar(req: Request, res: Response) {
