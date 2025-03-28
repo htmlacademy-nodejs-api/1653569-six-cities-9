@@ -23,6 +23,7 @@ export class DocumentExistsMiddleware implements Middleware {
         'DocumentExistsMiddleware'
       );
     }
+
     if (!await this.service.exists(documentId)) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,

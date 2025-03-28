@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsOptional, IsString, IsUrl, MaxLength, MinLength } from 'class-validator';
+import { IsDefined, IsEmail, IsEnum, IsOptional, IsString, IsUrl, MaxLength, MinLength } from 'class-validator';
 import { UserType } from '../../../types/index.js';
 import { USER } from '../user.constant.js';
 import { USER_VALIDATION_MESSAGE } from './user-validation.messages.js';
@@ -9,6 +9,7 @@ export class CreateUserDTO {
   @MaxLength(USER.NAME_LENGTH.MAX, { message: USER_VALIDATION_MESSAGE.NAME.MAX_LENGTH })
   public name!: string;
 
+  @IsDefined()
   @IsEmail({}, { message: USER_VALIDATION_MESSAGE.EMAIL.INVALID_FORMAT })
   public email!: string;
 

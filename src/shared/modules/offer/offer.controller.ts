@@ -9,15 +9,19 @@ import {
   HttpMethod,
   PrivateRouteMiddleware,
   ValidateDTOMiddleware,
-  ValidateObjectIdMiddleware
+  ValidateObjectIdMiddleware,
+  DocumentAuthorMiddleware
 } from '../../libs/rest/index.js';
+
 import { CreateOfferDTO,
   OfferCountDTO,
   PremiumOfferDTO,
   FullOfferRDO,
   ShortOfferRDO,
-  UpdateOfferDTO
+  UpdateOfferDTO,
+  IdOfferRDO
 } from './index.js';
+
 import { Logger } from '../../libs/logger/index.js';
 import { CityName } from '../../types/index.js';
 import { fillDTO } from '../../helpers/index.js';
@@ -28,14 +32,13 @@ import { COMPONENT, DECIMAL_RADIX } from '../../constant/index.js';
 import { ParamOfferId } from './types/param-offerid.type.js';
 import { IndexOfferRequest } from './types/index-offer-request.type.js';
 import { PremiumOfferRequest } from './types/premium-offer-request.type.js';
-import { CommentService } from '../comment/index.js';
+import { UpdateOfferRequest } from './types/update-offer-request.type.js';
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(COMPONENT.LOGGER) protected readonly logger: Logger,
     @inject(COMPONENT.OFFER_SERVICE) private readonly offerService: OfferService,
-    @inject(COMPONENT.COMMENT_SERVICE) private readonly commentService: CommentService
   ) {
     super(logger);
     this.logger.info('Register routes for OfferController...');
@@ -85,7 +88,8 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new DocumentAuthorMiddleware(this.offerService),
       ],
     });
 
@@ -97,7 +101,8 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDTOMiddleware(UpdateOfferDTO),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new DocumentAuthorMiddleware(this.offerService),
       ],
     });
   }
@@ -128,31 +133,15 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(FullOfferRDO, result));
   }
 
-  public async update({ body, params, tokenPayload }: Request, res: Response): Promise<void> {
-    if (!(await this.offerService.isOwnOffer(params.offerId, tokenPayload.id))) {
-      throw new HttpError(
-        StatusCodes.FORBIDDEN,
-        'Forbidden',
-        'OfferController',
-      );
-    }
-
+  public async update({ body, params, tokenPayload }: UpdateOfferRequest, res: Response): Promise<void> {
     await this.offerService.updateById(params.offerId, body);
     const result = await this.offerService.findById(params.offerId, tokenPayload.id);
     this.ok(res, fillDTO(FullOfferRDO, result));
   }
 
-  public async delete({ params, tokenPayload }: Request, res: Response): Promise<void> {
-    if (!(await this.offerService.isOwnOffer(params.offerId, tokenPayload.id))) {
-      throw new HttpError(
-        StatusCodes.FORBIDDEN,
-        'Forbidden',
-        'OfferController',
-      );
-    }
+  public async delete({ params }: Request, res: Response): Promise<void> {
     const result = await this.offerService.deleteById(params.offerId);
-    await this.commentService.deleteByOfferId(params.offerId);
-    this.noContent(res, result);
+    this.ok(res, fillDTO(IdOfferRDO, result));
   }
 
   public async getPremium({ query, tokenPayload }: PremiumOfferRequest, res: Response): Promise<void> {

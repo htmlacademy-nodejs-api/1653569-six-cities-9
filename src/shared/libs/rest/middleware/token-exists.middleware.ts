@@ -9,7 +9,7 @@ export class TokenExistsMiddleware implements Middleware {
     if (tokenPayload) {
       throw new HttpError(
         StatusCodes.CONFLICT,
-        'User already is authorized',
+        'Only an unauthorized user can register',
         'TokenExistsMiddleware'
       );
     }

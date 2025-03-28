@@ -8,6 +8,7 @@ import {
   IsEnum,
   IsInt,
   IsObject,
+  IsOptional,
   IsString,
   IsUrl,
   Max,
@@ -66,6 +67,12 @@ export class CreateOfferDTO {
   @Min(OFFER.PRICE.MIN, { message: OFFER_VALIDATION_MESSAGE.PRICE.MIN_VALUE })
   @Max(OFFER.PRICE.MAX, { message: OFFER_VALIDATION_MESSAGE.PRICE.MAX_VALUE })
   public price!: number;
+
+  @IsOptional()
+  public commentCount?: number;
+
+  @IsOptional()
+  public rating?: number;
 
   @IsArray({ message: OFFER_VALIDATION_MESSAGE.GOODS.INVALID_FORMAT })
   @IsEnum(Goods, { each: true, message: OFFER_VALIDATION_MESSAGE.GOODS.INVALID_FORMAT_ITEM })

@@ -9,7 +9,7 @@ import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDTO } from './dto/create-offer.dto.js';
 import { UpdateOfferDTO } from './dto/update-offer.dto.js';
 import { OFFER } from './offer.constant.js';
-import { populateFavorites, populateUser, populateComments } from './offer.aggregation.js';
+import { populateFavorites, POPULATE_USER } from './offer.aggregation.js';
 import { CommentService } from '../comment/index.js';
 import { COMPONENT } from '../../constant/index.js';
 
@@ -31,7 +31,6 @@ export class DefaultOfferService implements OfferService {
     const limit = count || OFFER.COUNT.DEFAULT;
     const result = await this.offerModel
       .aggregate([
-        ...populateComments,
         ...populateFavorites(userId),
         { $sort: { createdAt: SortType.Down } },
         { $limit: limit },
@@ -45,8 +44,7 @@ export class DefaultOfferService implements OfferService {
     const result = await this.offerModel
       .aggregate([
         { $match: { '_id': new Types.ObjectId(offerId) } },
-        ...populateUser,
-        ...populateComments,
+        ...POPULATE_USER,
         ...populateFavorites(userId, offerId),
       ])
       .exec();
@@ -57,9 +55,8 @@ export class DefaultOfferService implements OfferService {
   public async findFavoritesByUserId(userId: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .aggregate([
-        { $match: { isFavorite: true }},
-        ...populateComments,
         ...populateFavorites(userId),
+        { $match: { isFavorite: true }},
       ])
       .exec();
   }
@@ -88,17 +85,33 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel
       .aggregate([
         { $match: { city, isPremium: true } },
-        ...populateComments,
         ...populateFavorites(userId),
         { $sort: { createdAt: SortType.Down } },
         { $limit: OFFER.COUNT.PREMIUM },
       ]);
   }
 
-  public async isOwnOffer(offerId: string, userId: string): Promise<boolean> {
+  public async isAuthorOffer(offerId: string, userId: string): Promise<boolean> {
     const offer = await this.offerModel.findOne({ _id: offerId });
 
     return offer?.userId?.toString() === userId;
+  }
+
+  public async incCommentCount(offerId: string): Promise<Nullable<DocumentType<OfferEntity>>> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, { '$inc': { commentCount: 1 } })
+      .exec();
+  }
+
+  public async updateRating(offerId: string, rating: number): Promise<Nullable<DocumentType<OfferEntity>>> {
+    const offer = await this.offerModel.findById(offerId);
+
+    if (!offer) {
+      return null;
+    }
+
+    const updatedRating = ((offer.rating + rating) / offer.commentCount).toFixed(OFFER.RATING.DECIMAL_PRECISION);
+    return offer.updateOne({ rating: updatedRating }, { new: true }).exec();
   }
 
   public async exists(documentId: string): Promise<boolean> {

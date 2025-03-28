@@ -32,12 +32,7 @@ export class DefaultUserService implements UserService {
 
   public async findOrCreate(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
     const existedUser = await this.findByEmail(dto.email);
-
-    if (existedUser) {
-      return existedUser;
-    }
-
-    return this.create(dto, salt);
+    return existedUser ?? this.create(dto, salt);
   }
 
   public async getFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
@@ -45,20 +40,22 @@ export class DefaultUserService implements UserService {
   }
 
   public async addFavorite(userId: string, offerId: string): Promise<Nullable<DocumentType<UserEntity>>> {
-    const result = this.userModel
-      .findByIdAndUpdate(userId, {
-        $addToSet: { favorites: new Types.ObjectId(offerId) },
-      }, { new: true })
-      .exec();
+    const result = this.userModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { favorites: new Types.ObjectId(offerId) } },
+      { new: true }
+    ).exec();
+
     return result as unknown as DocumentType<UserEntity>;
   }
 
   public async deleteFavorite(userId: string, offerId: string): Promise<Nullable<DocumentType<UserEntity>>> {
-    const result = this.userModel
-      .findByIdAndUpdate(userId, {
-        $pull: { favorites: new Types.ObjectId(offerId) },
-      }, { new: true })
-      .exec();
+    const result = this.userModel.findByIdAndUpdate(
+      userId,
+      { $pull: { favorites: new Types.ObjectId(offerId) } },
+      { new: true }
+    ).exec();
+
     return result as unknown as DocumentType<UserEntity>;
   }
 }

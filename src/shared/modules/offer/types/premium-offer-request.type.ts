@@ -1,5 +1,6 @@
 import { Request } from 'express';
-import { QueryCity } from './query-city.type.js';
+import { Query } from 'express-serve-static-core';
+import { CityName } from '../../../types/index.js';
 
-export type PremiumOfferRequest = Request<unknown, unknown, unknown, QueryCity>
+export type PremiumOfferRequest = Request<unknown, unknown, unknown, { city: CityName} | Query>
 

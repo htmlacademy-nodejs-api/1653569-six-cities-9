@@ -23,7 +23,7 @@ import { CreateUserDTO, LoginUserDTO, LoggedUserRDO, UserRDO } from './index.js'
 import { UserRoute } from './user.constant.js';
 import { AuthService } from '../auth/index.js';
 import { ParamOfferId } from '../offer/types/param-offerid.type.js';
-import { OfferService, ShortOfferRDO } from '../offer/index.js';
+import { IdOfferRDO, OfferService, ShortOfferRDO } from '../offer/index.js';
 import { TokenExistsMiddleware } from '../../libs/rest/middleware/token-exists.middleware.js';
 
 @injectable()
@@ -42,6 +42,9 @@ export class UserController extends BaseController {
       path: UserRoute.LOGIN,
       method: HttpMethod.Get,
       handler: this.checkAuthenticate,
+      middlewares: [
+        new PrivateRouteMiddleware()
+      ]
     });
 
     this.addRoute({
@@ -99,7 +102,7 @@ export class UserController extends BaseController {
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
-        new ValidateObjectIdMiddleware('userId'),
+        new PrivateRouteMiddleware(),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
       ]
     });
@@ -128,15 +131,6 @@ export class UserController extends BaseController {
 
   public async checkAuthenticate({ tokenPayload }: Request, res: Response) {
     const foundedUser = await this.userService.findByEmail(tokenPayload.email);
-
-    if (!foundedUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        'Unauthorized',
-        'UserController'
-      );
-    }
-
     this.ok(res, fillDTO(UserRDO, foundedUser));
   }
 
@@ -157,12 +151,12 @@ export class UserController extends BaseController {
     }
 
     const result = await this.userService.addFavorite(tokenPayload.id, params.offerId);
-    this.ok(res, fillDTO(UserRDO, result));
+    this.ok(res, fillDTO(IdOfferRDO, result));
   }
 
   public async deleteFavorite({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
     const result = await this.userService.deleteFavorite(tokenPayload.id, params.offerId);
-    this.noContent(res, fillDTO(UserRDO, result));
+    this.ok(res, fillDTO(IdOfferRDO, result));
   }
 
   public async uploadAvatar(req: Request, res: Response) {

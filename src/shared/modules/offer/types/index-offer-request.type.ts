@@ -1,4 +1,4 @@
 import { Request } from 'express';
-import { QueryCount } from './query-count.type.js';
+import { Query } from 'express-serve-static-core';
 
-export type IndexOfferRequest = Request<unknown, unknown, unknown, QueryCount>;
+export type IndexOfferRequest = Request<unknown, unknown, unknown, { count: number } | Query>;

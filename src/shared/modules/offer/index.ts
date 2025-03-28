@@ -9,4 +9,5 @@ export { OfferController } from './offer.controller.js';
 export { FullOfferRDO } from './rdo/full-offer.rdo.js';
 export { ShortOfferRDO } from './rdo/short-offer.rdo.js';
 export { UpdateOfferDTO } from './dto/update-offer.dto.js';
+export { IdOfferRDO } from './rdo/id-offer.rdo.js';
 export { OFFER_VALIDATION_MESSAGE } from './dto/offer-validation.messages.js';

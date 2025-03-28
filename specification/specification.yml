@@ -173,20 +173,12 @@ paths:
         '404':
           description: Предложение с указанным id не найдено.
 
-  /users/avatar/{userId}:
+  /users/avatar:
     post:
       tags:
         - users
       summary: Загрузить изображение аватара.
       description: Загружает изображение аватара пользователя. Изображение аватара должно быть в формате `png` или `jpg`.
-
-      parameters:
-        - name: userId
-          in: path
-          schema:
-            type: string
-          example: 'avatar.jpg'
-          required: true
 
       requestBody:
         description: Изображение аватара.
@@ -195,6 +187,8 @@ paths:
             schema:
               type: string
               format: base64
+              example: 'avatar.jpg'
+        required: true
 
       responses:
         '201':

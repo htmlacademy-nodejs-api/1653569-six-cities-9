@@ -1,7 +1,6 @@
 import { Types } from 'mongoose';
-import { OFFER } from './offer.constant.js';
 
-export const populateUser = [
+export const POPULATE_USER = [
   {
     $lookup: {
       from: 'users',
@@ -11,46 +10,6 @@ export const populateUser = [
     },
   },
   { $unwind: '$user' },
-];
-
-export const populateComments = [
-  {
-    $lookup: {
-      from: 'comments',
-      let: { offerId: '$_id' },
-      pipeline: [
-        { $match: { $expr: { $eq: ['$offerId', '$$offerId'] } } },
-        { $project: { _id: 1, rating: 1 } },
-      ],
-      as: 'comments',
-    }
-  },
-  { $addFields: { commentCount: { $size: '$comments'} } },
-  { $addFields: { commentRatingSum: {
-    $reduce: {
-      input: '$comments',
-      initialValue: { sum: 0 },
-      in: {
-        sum: { $add: ['$$value.sum', '$$this.rating'] }
-      }
-    }
-  } } },
-  { $addFields: { rating: {
-    $cond: {
-      if: {
-        $ne: ['$commentCount', 0]
-      },
-      then: { $round: [{
-        $divide: [
-          '$commentRatingSum.sum',
-          '$commentCount'
-        ]
-      }, OFFER.RATING.DECIMAL_PRECISION] },
-      else: null,
-    }
-  } } },
-  { $unset: 'commentRatingSum' },
-  { $unset: 'comments' },
 ];
 
 export const populateFavorites = (userId: string, offerId?: string) => {

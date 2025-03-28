@@ -1,7 +1,7 @@
 export const UserRoute = {
   REGISTER: '/register',
   LOGIN: '/login',
-  AVATAR: '/avatar/:userId',
+  AVATAR: '/avatar',
   FAVORITES: '/favorites',
   FAVORITES_ID: '/favorites/:offerId',
 } as const;

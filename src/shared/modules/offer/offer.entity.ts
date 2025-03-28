@@ -54,6 +54,12 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public price!: number;
 
+  @prop({ default: 0 })
+  public commentCount!: number;
+
+  @prop({ default: null })
+  public rating!: number;
+
   @prop({ type: () => String, enum: Goods, required: true })
   public goods!: Goods[];
 
