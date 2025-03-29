@@ -19,6 +19,7 @@ export class CreateUserDTO {
   public password!: string;
 
   @IsOptional()
+  @IsString()
   @IsUrl({}, { message: USER_VALIDATION_MESSAGE.AVATAR_PATH.INVALID_FORMAT })
   public avatarPath!: string;
 

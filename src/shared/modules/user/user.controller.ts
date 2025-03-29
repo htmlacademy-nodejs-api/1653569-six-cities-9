@@ -19,7 +19,7 @@ import { LoginUserRequest } from './types/login-user-request.type.js';
 import { UserService } from './user-service.interface.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
-import { CreateUserDTO, LoginUserDTO, LoggedUserRDO, UserRDO } from './index.js';
+import { CreateUserDTO, LoginUserDTO, LoggedUserRDO, UserRDO, UploadUserAvatarRDO } from './index.js';
 import { UserRoute } from './user.constant.js';
 import { AuthService } from '../auth/index.js';
 import { ParamOfferId } from '../offer/types/param-offerid.type.js';
@@ -126,7 +126,8 @@ export class UserController extends BaseController {
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
-    this.ok(res, fillDTO(LoggedUserRDO, { email: user.email, token }));
+    const responseData = fillDTO(LoggedUserRDO, user);
+    this.ok(res, Object.assign(responseData, { token }));
   }
 
   public async checkAuthenticate({ tokenPayload }: Request, res: Response) {
@@ -159,7 +160,9 @@ export class UserController extends BaseController {
     this.ok(res, fillDTO(IdOfferRDO, result));
   }
 
-  public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, { filepath: req.file?.path });
+  public async uploadAvatar({ tokenPayload, file }: Request, res: Response) {
+    const uploadFile = { name: tokenPayload.name, avatarPath: file?.filename };
+    await this.userService.updateById(tokenPayload.id, uploadFile);
+    this.created(res, fillDTO(UploadUserAvatarRDO, { filepath: uploadFile.avatarPath }));
   }
 }
