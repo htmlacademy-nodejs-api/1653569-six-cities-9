@@ -157,6 +157,7 @@ DB_PASSWORD=test - Пароль базы данных
 DB_HOST=127.0.0.1 - Имя хоста базы данных  
 DB_PORT=27017 - Порт базы данных  
 UPLOAD_DIRECTORY=./upload - Директория для загрузки изображений  
+STATIC_DIRECTORY=./static - Директория для статических файлов  
 JWT_SECRET=secret - Секретный набор символов для JWT  
 JWT_ALGORITHM=HS256 - Алгоритм для создания JWT  
 JWT_EXPIRED_TIME=2d - Время жизни JWT

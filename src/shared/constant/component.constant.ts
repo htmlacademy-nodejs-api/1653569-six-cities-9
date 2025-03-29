@@ -3,7 +3,7 @@ export const COMPONENT = {
   LOGGER: Symbol(),
   CONFIG: Symbol(),
   DATABASE_CLIENT: Symbol(),
-  EXCEPTION_FILTER: Symbol(),
+  PATH_TRANSFORMER: Symbol(),
 
   USER_MODEL: Symbol(),
   USER_SERVICE: Symbol(),
@@ -19,4 +19,8 @@ export const COMPONENT = {
 
   AUTH_SERVICE: Symbol(),
   AUTH_EXCEPTION_FILTER: Symbol(),
+
+  EXCEPTION_FILTER: Symbol(),
+  HTTP_EXCEPTION_FILTER: Symbol(),
+  VALIDATION_EXCEPTION_FILTER: Symbol(),
 } as const;

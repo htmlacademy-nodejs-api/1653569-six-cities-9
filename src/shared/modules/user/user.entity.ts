@@ -9,7 +9,6 @@ import { User, UserType } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/index.js';
 import { OfferEntity } from '../offer/offer.entity.js';
 import { CreateUserDTO } from './dto/create-user.dto.js';
-import { USER } from './user.constant.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base {}
@@ -30,7 +29,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   public email!: string;
 
   @prop({ required: true })
-  private password!: string;
+  private password: string;
 
   @prop({ required: false })
   public avatarPath!: string;
@@ -46,7 +45,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
 
     this.name = userData.name;
     this.email = userData.email;
-    this.avatarPath = userData.avatarPath || USER.DEFAULT.AVATAR;
+    this.avatarPath = userData.avatarPath;
     this.type = userData.type;
     this.password = createSHA256(userData.password, salt);
   }

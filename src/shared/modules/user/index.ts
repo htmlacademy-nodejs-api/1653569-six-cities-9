@@ -7,3 +7,5 @@ export { createUserContainer } from './user.container.js';
 export { UserController } from './user.controller.js';
 export { LoggedUserRDO } from './rdo/logged-user.rdo.js';
 export { UserRDO } from './rdo/user.rdo.js';
+export { UpdateUserDTO } from './dto/update-user.dto.js';
+export { UploadUserAvatarRDO } from './rdo/upload-user-avatar.rdo.js';

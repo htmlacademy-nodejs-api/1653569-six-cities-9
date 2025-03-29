@@ -9,6 +9,8 @@ import { Nullable } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity, OfferService } from '../offer/index.js';
 import { COMPONENT } from '../../constant/index.js';
+import { USER } from './user.constant.js';
+import { UpdateUserDTO } from './dto/update-user.dto.js';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -19,7 +21,7 @@ export class DefaultUserService implements UserService {
   ) {}
 
   public async create(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity(dto, salt);
+    const user = new UserEntity({ ...dto, avatarPath: USER.DEFAULT.AVATAR }, salt);
     const result = await this.userModel.create(user);
     this.logger.info(`New user created: ${user.email}`);
 
@@ -28,6 +30,13 @@ export class DefaultUserService implements UserService {
 
   public async findByEmail(email: string): Promise<Nullable<DocumentType<UserEntity>>> {
     return this.userModel.findOne({ email });
+  }
+
+  public async updateById(userId: string, dto: UpdateUserDTO): Promise<Nullable<DocumentType<UserEntity>>> {
+    const result = await this.userModel.findByIdAndUpdate(userId, dto, { new: true });
+    this.logger.info(`User updated: ${dto.name}`);
+
+    return result as DocumentType<UserEntity>;
   }
 
   public async findOrCreate(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
