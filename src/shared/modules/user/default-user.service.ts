@@ -21,7 +21,8 @@ export class DefaultUserService implements UserService {
   ) {}
 
   public async create(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity({ ...dto, avatarPath: USER.DEFAULT.AVATAR }, salt);
+    const avatarPath = dto.avatarPath ?? USER.DEFAULT.AVATAR;
+    const user = new UserEntity(Object.assign(dto, { avatarPath }), salt);
     const result = await this.userModel.create(user);
     this.logger.info(`New user created: ${user.email}`);
 
@@ -34,14 +35,24 @@ export class DefaultUserService implements UserService {
 
   public async updateById(userId: string, dto: UpdateUserDTO): Promise<Nullable<DocumentType<UserEntity>>> {
     const result = await this.userModel.findByIdAndUpdate(userId, dto, { new: true });
-    this.logger.info(`User updated: ${dto.name}`);
+    this.logger.info(`User updated: ${dto.email}`);
 
     return result as DocumentType<UserEntity>;
   }
 
   public async findOrCreate(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
     const existedUser = await this.findByEmail(dto.email);
-    return existedUser ?? this.create(dto, salt);
+    return existedUser ?? await this.create(dto, salt);
+  }
+
+  public async isFavoriteExist(userId: string, offerId: string): Promise<boolean> {
+    const result = await this.userModel.aggregate([
+      { $match: { _id: new Types.ObjectId(userId) } },
+      { $unwind: '$favorites' },
+      { $match: { 'favorites': new Types.ObjectId(offerId) } }
+    ]);
+
+    return result.length > 0;
   }
 
   public async getFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {

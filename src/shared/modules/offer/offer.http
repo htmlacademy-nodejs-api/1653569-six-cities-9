@@ -2,25 +2,26 @@
 ## Получить список всех офферов
 GET http://localhost:5000/offers HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZGM3YTM1M2M3NzAxM2E3NzEyMGY3MiIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDI5MDQ2MTMsImV4cCI6MTc0MzA3NzQxM30.KXdJzbr4kGyKKwLGREdt37tYbqIhuNkD0B93wyFDFdg
+# Authorization: Bearer *
+
 ###
 
-## Получить ограниченный список офферов
+## Получить ограниченный список из двух офферов
 GET http://localhost:5000/offers?count=2 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZTE5OWJiZjlkOTgxZDg1MWU4YjczZCIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnM3QG1haWwubmV0IiwiaWF0IjoxNzQyODk5OTg4LCJleHAiOjE3NDMwNzI3ODh9.6pmDkFtMCDPMyWqZQXz4cwOubMQS-a0ySLCf1zbhJ10
+# Authorization: Bearer *
 
 ###
 
 ## Добавить новыЙ оффер
 POST http://localhost:5000/offers HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZTFhMzI1ZmRhMDhlY2M0ZTYwMWJiZSIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnMxMkBtYWlsLm5ldCIsImlhdCI6MTc0MjkwMzI5MSwiZXhwIjoxNzQzMDc2MDkxfQ.wIZ1b8KXLSYTDDnEwDRhVmBJHe8Y6y5r6v0qtKOUl60
+# Authorization: Bearer *
 
 {
-  "title": "Nice, cozy, warm big bed apartment",
+  "title": "Appartment in the center of Paris",
   "description": "Design interior in most sympathetic area!",
-  "city": "Paris",
+  "city": { "name": "Paris" },
   "previewImage": "preview.jpg",
   "images": [
     "image-1.jpg",
@@ -34,42 +35,43 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZTFhMzI1ZmRhMDhlY2M0ZTYwM
   "type": "house",
   "bedrooms": 4,
   "maxAdults": 7,
-  "price": 12000,
+  "price": 10000,
   "goods": ["Air conditioning", "Breakfast"],
   "location": {
-    "latitude": 48.85661,
-    "longitude": 2.351499
+    "latitude": 48.85231,
+    "longitude": 2.356232
   }
 }
 
 ###
 
 # Получить оффер по идентификатору
-GET http://localhost:5000/offers/67dc7ab83c77013a77120f78 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZGM3YTM1M2M3NzAxM2E3NzEyMGY3MiIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDI5MDQ2MTMsImV4cCI6MTc0MzA3NzQxM30.KXdJzbr4kGyKKwLGREdt37tYbqIhuNkD0B93wyFDFdg
+GET http://localhost:5000/offers/67f15f4c0350a40b2b363d58 HTTP/1.1
+# Authorization: Bearer *
 
 ###
 
 ## Удалить оффер по идентификатору
 DELETE http://localhost:5000/offers/67e2981b2641d485167934c3 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZTFhMzI1ZmRhMDhlY2M0ZTYwMWJiZSIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnMxMkBtYWlsLm5ldCIsImlhdCI6MTc0MjkwMzI5MSwiZXhwIjoxNzQzMDc2MDkxfQ.wIZ1b8KXLSYTDDnEwDRhVmBJHe8Y6y5r6v0qtKOUl60
+# Authorization: Bearer *
 
 ## Обновить оффер по идентификатору
-PATCH http://localhost:5000/offers/67dc7ab83c77013a77120f78 HTTP/1.1
+PATCH http://localhost:5000/offers/67f15f4c0350a40b2b363d58 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZGM3YTM1M2M3NzAxM2E3NzEyMGY3MiIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnNAbWFpbC5uZXQiLCJpYXQiOjE3NDI5MDI2MzQsImV4cCI6MTc0MzA3NTQzNH0.44_Vw3vYlgOmyycM05nWq1KhuoFw6WxAfAkNtJUyh6U
+# Authorization: Bearer *
 
 {
-  "title": "New amazing city 15",
-  "description": "New amazing description",
-  "price": 15000
+  "title": "New amazing appartment",
+  "description": "New amazing appartment nearby!",
+  "city": { "name": "Cologne" },
+  "price": 7000
 }
 
 ###
 
-## Получить список Премиум офферов
+## Получить список премиум офферов по выбранному городу
 GET http://localhost:5000/offers/premium?city=Paris HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZTE5OWJiZjlkOTgxZDg1MWU4YjczZCIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnM3QG1haWwubmV0IiwiaWF0IjoxNzQyODk5OTg4LCJleHAiOjE3NDMwNzI3ODh9.6pmDkFtMCDPMyWqZQXz4cwOubMQS-a0ySLCf1zbhJ10
+# Authorization: Bearer *
 
 ###

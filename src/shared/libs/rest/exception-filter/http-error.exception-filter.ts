@@ -3,7 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import { NextFunction, Request, Response } from 'express';
 
 import { ExceptionFilter } from './exception-filter.interface.js';
-import { COMPONENT } from '../../../constant/component.constant.js';
+import { COMPONENT } from '../../../constant/index.js';
 import { Logger } from '../../logger/index.js';
 import { HttpError } from '../errors/index.js';
 import { createErrorObject } from '../../../helpers/index.js';

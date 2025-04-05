@@ -3,13 +3,9 @@ import { inject, injectable } from 'inversify';
 import { Logger } from '../../logger/index.js';
 import { Config, RestSchema } from '../../config/index.js';
 import { getFullServerPath } from '../../../helpers/index.js';
-import { COMPONENT } from '../../../constant/component.constant.js';
+import { COMPONENT } from '../../../constant/index.js';
 import { ROUTE_STATIC } from '../../../../rest/index.js';
 import { DEFAULT_STATIC_IMAGES, STATIC_RESOURCE_FIELDS } from './path-transformer.constant.js';
-
-function isObject(value: unknown): value is Record<string, object> {
-  return typeof value === 'object' && value !== null;
-}
 
 @injectable()
 export class PathTransformer {
@@ -18,6 +14,10 @@ export class PathTransformer {
     @inject(COMPONENT.CONFIG) private readonly config: Config<RestSchema>,
   ) {
     this.logger.info('PathTranformer created!');
+  }
+
+  private isObject(value: unknown): value is Record<string, object> {
+    return typeof value === 'object' && value !== null;
   }
 
   private hasDefaultImage(value: string) {
@@ -37,7 +37,7 @@ export class PathTransformer {
         if (Object.hasOwn(current, key)) {
           const value = current[key];
 
-          if (isObject(value)) {
+          if (this.isObject(value)) {
             stack.push(value);
             continue;
           }

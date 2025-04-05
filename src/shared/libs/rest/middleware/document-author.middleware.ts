@@ -12,10 +12,10 @@ export class DocumentAuthorMiddleware implements Middleware {
   ) {}
 
   public async execute({ params, tokenPayload }: Request, _res: Response, next: NextFunction): Promise<void> {
-    if (!await this.service.isAuthorOffer(params.offerId, tokenPayload.id)) {
+    if (!await this.service.isOfferAuthor(params.offerId, tokenPayload.id)) {
       throw new HttpError(
         StatusCodes.FORBIDDEN,
-        'Only your own offer can be edited',
+        'Access denied',
         'OfferController',
       );
     }

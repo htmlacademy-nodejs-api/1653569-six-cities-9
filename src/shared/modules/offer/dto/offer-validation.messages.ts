@@ -1,4 +1,4 @@
-import { CityName, Goods, OfferType } from '../../../types/index.js';
+import { Goods, OfferType } from '../../../types/index.js';
 import { OFFER } from '../offer.constant.js';
 
 export const OFFER_VALIDATION_MESSAGE = {
@@ -7,14 +7,14 @@ export const OFFER_VALIDATION_MESSAGE = {
     MAX_LENGTH: `Maximum title length must be ${OFFER.TITLE_LENGTH.MAX}`,
   },
   DESCRIPTION: {
-    MIN_LENGTH: `Minimum description length must be ${OFFER.DESCRIPTION_LENGTH.MIN}}`,
+    MIN_LENGTH: `Minimum description length must be ${OFFER.DESCRIPTION_LENGTH.MIN}`,
     MAX_LENGTH: `Maximum description length must be ${OFFER.DESCRIPTION_LENGTH.MAX}`,
   },
   CREATED_DATE: {
     INVALID_FORMAT: 'Field createdDate must be a valid ISO date',
   },
   CITY: {
-    INVALID_FORMAT: `Field city must be an one of: ${Object.values(CityName).join(', ')}`,
+    INVALID_FORMAT: 'Field location must be an object {name: string, location: {latitude: number, longitude: number}}',
   },
   PREVIEW_IMAGE: {
     INVALID_FORMAT: 'Field previewImage must be valid url',
@@ -28,7 +28,7 @@ export const OFFER_VALIDATION_MESSAGE = {
     INVALID_FORMAT: 'Field isPremium must be a boolean',
   },
   TYPE: {
-    INVALID_FORMAT: `Field type must be an one of: ${Object.values(OfferType).join(', ')}`
+    INVALID_FORMAT:  `Field goods must be an one of: ${Object.values(OfferType).join(', ')}`
   },
   BEDROOMS: {
     MIN_VALUE: `Minimum quantity bedrooms is ${OFFER.BEDROOMS.MIN}`,

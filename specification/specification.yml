@@ -91,6 +91,19 @@ paths:
         '403':
           description: Несуществующий логин.
 
+  /users/logout:
+    delete:
+      tags:
+        - users
+      summary: Выход из закрытой части приложения.
+      description: Выход пользователя из закрытой части приложения и удаление токена.
+
+      responses:
+        '200':
+          description: Токен пользователя удален.
+        '403':
+          description: Пользователь не авторизован.
+
   /users/favorites:
     get:
       tags:
@@ -418,6 +431,10 @@ components:
       in: header
 
   schemas:
+    userId:
+      type: string
+      example: ef4y83ryfisdf0f97r3j08f3fmwsf
+
     userName:
       type: string
       example: Alex

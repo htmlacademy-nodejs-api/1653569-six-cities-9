@@ -7,7 +7,7 @@ import { Controller } from './controller.interface.js';
 import { Logger } from '../../logger/index.js';
 import { Route } from '../types/route.interface.js';
 import { PathTransformer } from '../transform/path-transformer.js';
-import { COMPONENT } from '../../../constant/component.constant.js';
+import { COMPONENT } from '../../../constant/index.js';
 
 @injectable()
 export abstract class BaseController implements Controller {

@@ -1,16 +1,14 @@
-import { CityName } from './city-name.enum.js';
 import { OfferType } from './offer-type.enum.js';
 import { Goods } from './goods.enum.js';
-import { User } from './user.type.js';
+import { UserWithPassword } from './user.type.js';
 import { Location } from './location.type.js';
-
-export type OfferId = string;
+import { City } from './index.js';
 
 export type Offer = {
   title: string;
   description: string;
   createdDate: Date;
-  city: CityName;
+  city: City;
   previewImage: string;
   images: string[];
   isPremium: boolean;
@@ -20,6 +18,6 @@ export type Offer = {
   maxAdults: number;
   price: number;
   goods: Goods[];
-  author: User;
+  author: UserWithPassword;
   location: Location;
 }

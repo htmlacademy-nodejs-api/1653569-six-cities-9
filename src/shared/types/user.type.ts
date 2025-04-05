@@ -6,3 +6,5 @@ export type User = {
   avatarPath: string;
   type: UserType;
 }
+export type UserWithPassword = Pick<User, keyof User> & { password: string}
+

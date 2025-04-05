@@ -67,6 +67,12 @@ export class UserController extends BaseController {
     });
 
     this.addRoute({
+      path: UserRoute.LOGOUT,
+      method: HttpMethod.Delete,
+      handler: this.logout,
+    });
+
+    this.addRoute({
       path: UserRoute.FAVORITES,
       method: HttpMethod.Get,
       handler: this.showFavorites,
@@ -130,6 +136,10 @@ export class UserController extends BaseController {
     this.ok(res, Object.assign(responseData, { token }));
   }
 
+  public async logout(_req: Request, res: Response): Promise<void> {
+    this.ok(res, { message: 'Logout success' });
+  }
+
   public async checkAuthenticate({ tokenPayload }: Request, res: Response) {
     const foundedUser = await this.userService.findByEmail(tokenPayload.email);
     this.ok(res, fillDTO(UserRDO, foundedUser));
@@ -141,9 +151,9 @@ export class UserController extends BaseController {
   }
 
   public async addFavorite({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const favorites = await this.userService.getFavorites(tokenPayload.id);
+    const isExist = await this.userService.isFavoriteExist(tokenPayload.id, params.offerId);
 
-    if (favorites.map((item) => item._id.toString()).includes(params.offerId)) {
+    if (isExist) {
       throw new HttpError(
         StatusCodes.CONFLICT,
         `Offer ${params.offerId} is already in favorites`,
@@ -161,8 +171,7 @@ export class UserController extends BaseController {
   }
 
   public async uploadAvatar({ tokenPayload, file }: Request, res: Response) {
-    const uploadFile = { name: tokenPayload.name, avatarPath: file?.filename };
-    await this.userService.updateById(tokenPayload.id, uploadFile);
-    this.created(res, fillDTO(UploadUserAvatarRDO, { filepath: uploadFile.avatarPath }));
+    await this.userService.updateById(tokenPayload.id, { email: tokenPayload.email, avatarPath: file?.filename });
+    this.created(res, fillDTO(UploadUserAvatarRDO, { filepath: file?.filename }));
   }
 }
