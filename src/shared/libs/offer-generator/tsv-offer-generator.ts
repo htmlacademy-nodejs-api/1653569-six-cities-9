@@ -2,11 +2,13 @@ import dayjs from 'dayjs';
 
 import { City, MockServerData } from '../../types/index.js';
 import { OfferGenerator } from './offer-generator.interface.js';
-import { generateRandomValue, getRandomBoolean, getRandomItem, getRandomItems } from '../../helpers/index.js';
+import { generateRandomValue, getRandomBoolean, getRandomItem, getRandomItems, getRandomItemShift } from '../../helpers/index.js';
 import { SEPARATOR } from '../../constant/index.js';
 import { OFFER } from '../../modules/offer/offer.constant.js';
+import { CITY_LOCATION } from '../../constant/common.constant.js';
 
 const DURATION_TIME = 'day';
+const LOCATION_SHIFT = 0.01;
 
 const WEEKDAY = {
   FIRST: 1,
@@ -21,7 +23,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const description = getRandomItem<string>(this.mockData.descriptions);
     const city = getRandomItem<City>(this.mockData.cities);
     const previewImage = getRandomItem<string>(this.mockData.previewImages);
-    const images = getRandomItems<string>(this.mockData.previewImages, true).join(SEPARATOR.SEMICOLON);
+    const images = getRandomItems<string>(this.mockData.images, true).join(SEPARATOR.SEMICOLON);
     const isPremium = getRandomBoolean();
     const isFavorite = getRandomBoolean(false);
     const type = getRandomItem(this.mockData.types);
@@ -31,21 +33,32 @@ export class TSVOfferGenerator implements OfferGenerator {
     const goods = getRandomItems<string>(this.mockData.goods).join(SEPARATOR.SEMICOLON);
     const name = getRandomItem(this.mockData.authors);
     const email = getRandomItem(this.mockData.emails);
-    const avatar = getRandomItem(this.mockData.avatarPaths);
+    const password = getRandomItem(this.mockData.passwords);
+    const avatar = getRandomItem(this.mockData.avatars);
     const userType = getRandomItem(this.mockData.userTypes);
 
     const date = dayjs()
       .subtract(generateRandomValue(WEEKDAY.FIRST, WEEKDAY.LAST), DURATION_TIME)
       .toISOString();
 
-    const user = [name, email, avatar, userType].join(SEPARATOR.SEMICOLON);
-    const location = [city.location.latitude, city.location.longitude].join(SEPARATOR.SEMICOLON);
+    const cityLocation = [
+      city.name,
+      CITY_LOCATION[city.name].latitude,
+      CITY_LOCATION[city.name].longitude
+    ].join(SEPARATOR.SEMICOLON);
+
+    const offerLocation = [
+      getRandomItemShift(city.location.latitude, LOCATION_SHIFT),
+      getRandomItemShift(city.location.longitude, LOCATION_SHIFT)
+    ].join(SEPARATOR.SEMICOLON);
+
+    const user = [name, email, password, avatar, userType].join(SEPARATOR.SEMICOLON);
 
     return [
       title,
       description,
       date,
-      city.name,
+      cityLocation,
       previewImage,
       images,
       isPremium,
@@ -56,7 +69,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       price,
       goods,
       user,
-      location,
+      offerLocation,
     ].join(SEPARATOR.TAB);
   }
 }

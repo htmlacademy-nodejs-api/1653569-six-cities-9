@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
 
 import { OfferService } from './offer-service.interface.js';
-import { CityName, Nullable, SortType } from '../../types/index.js';
+import { City, CityName, Nullable, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDTO } from './dto/create-offer.dto.js';
@@ -12,6 +12,9 @@ import { OFFER } from './offer.constant.js';
 import { populateFavorites, POPULATE_USER } from './offer.aggregation.js';
 import { CommentService } from '../comment/index.js';
 import { COMPONENT } from '../../constant/index.js';
+import { CITY_LOCATION } from '../../constant/common.constant.js';
+import { HttpError } from '../../libs/rest/index.js';
+import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -21,8 +24,15 @@ export class DefaultOfferService implements OfferService {
     @inject(COMPONENT.COMMENT_SERVICE) private readonly commentService: CommentService,
   ) {}
 
+  private getCity(cityName: CityName): City {
+    return {
+      name: cityName,
+      location: CITY_LOCATION[cityName]
+    };
+  }
+
   public async create(dto: CreateOfferDTO): Promise<DocumentType<OfferEntity>> {
-    const result = await this.offerModel.create(dto);
+    const result = await this.offerModel.create(Object.assign(dto, { city: this.getCity(dto.city.name) }));
     this.logger.info(`New offer created: ${dto.title}`);
     return result;
   }
@@ -31,6 +41,7 @@ export class DefaultOfferService implements OfferService {
     const limit = count || OFFER.COUNT.DEFAULT;
     const result = await this.offerModel
       .aggregate([
+        ...POPULATE_USER,
         ...populateFavorites(userId),
         { $sort: { createdAt: SortType.Down } },
         { $limit: limit },
@@ -55,6 +66,7 @@ export class DefaultOfferService implements OfferService {
   public async findFavoritesByUserId(userId: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .aggregate([
+        ...POPULATE_USER,
         ...populateFavorites(userId),
         { $match: { isFavorite: true }},
       ])
@@ -62,10 +74,20 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async updateById(offerId: string, dto: UpdateOfferDTO): Promise<Nullable<DocumentType<OfferEntity>>> {
+
+    if (!dto.city) {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        'City is required',
+        'OfferController',
+      );
+    }
+
+    const offerDTO = Object.assign(dto, { city: this.getCity(dto.city.name) });
     this.logger.info(`Offer updated: ${dto.title}`);
 
     return this.offerModel
-      .findByIdAndUpdate(offerId, dto, { new: true })
+      .findByIdAndUpdate(offerId, offerDTO, { new: true })
       .populate('userId')
       .exec();
   }
@@ -84,14 +106,15 @@ export class DefaultOfferService implements OfferService {
 
     return this.offerModel
       .aggregate([
-        { $match: { city, isPremium: true } },
+        { $match: { 'city.name': city, isPremium: true } },
+        ...POPULATE_USER,
         ...populateFavorites(userId),
         { $sort: { createdAt: SortType.Down } },
         { $limit: OFFER.COUNT.PREMIUM },
       ]);
   }
 
-  public async isAuthorOffer(offerId: string, userId: string): Promise<boolean> {
+  public async isOfferAuthor(offerId: string, userId: string): Promise<boolean> {
     const offer = await this.offerModel.findOne({ _id: offerId });
 
     return offer?.userId?.toString() === userId;
@@ -110,7 +133,11 @@ export class DefaultOfferService implements OfferService {
       return null;
     }
 
-    const updatedRating = ((offer.rating + rating) / offer.commentCount).toFixed(OFFER.RATING.DECIMAL_PRECISION);
+    const updatedRating = !offer.rating
+      ? rating
+      : (((offer.rating * offer.commentCount) + rating) / (offer.commentCount + 1))
+        .toFixed(OFFER.RATING.DECIMAL_PRECISION);
+
     return offer.updateOne({ rating: updatedRating }, { new: true }).exec();
   }
 

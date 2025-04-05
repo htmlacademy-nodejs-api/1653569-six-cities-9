@@ -1,7 +1,12 @@
-import { Expose } from 'class-transformer';
-import { CityName, OfferType } from '../../../types/index.js';
+import { Expose, Transform, Type } from 'class-transformer';
+import { City, Location, OfferType } from '../../../types/index.js';
+import { UserRDO } from '../../user/index.js';
 
 export class ShortOfferRDO {
+  @Expose()
+  @Transform(({ obj }) => obj._id.toString())
+  public id: string;
+
   @Expose()
   public title!: string;
 
@@ -9,7 +14,7 @@ export class ShortOfferRDO {
   public createdDate!: Date;
 
   @Expose()
-  public city!: CityName;
+  public city!: City;
 
   @Expose()
   public previewImage!: string;
@@ -31,4 +36,11 @@ export class ShortOfferRDO {
 
   @Expose()
   public commentCount!: number;
+
+  @Expose()
+  @Type(() => UserRDO)
+  public user!: UserRDO;
+
+  @Expose()
+  public location!: Location;
 }

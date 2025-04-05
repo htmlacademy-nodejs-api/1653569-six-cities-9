@@ -1,15 +1,16 @@
 # Комментарии
 ## Получить список комментариев по идентификатору оффера
-GET http://localhost:5000/comments/67dc7ab83c77013a77120f78 HTTP/1.1
+GET http://localhost:5000/comments/67f15f4c0350a40b2b363d58 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZTFhMzI1ZmRhMDhlY2M0ZTYwMWJiZSIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnMxMkBtYWlsLm5ldCIsImlhdCI6MTc0MjkwMzI5MSwiZXhwIjoxNzQzMDc2MDkxfQ.wIZ1b8KXLSYTDDnEwDRhVmBJHe8Y6y5r6v0qtKOUl60
+# Authorization: Bearer *
+
 
 ###
 
 ## Создать комментарий по идентификатору оффера
-POST http://localhost:5000/comments/67dc7ab83c77013a77120f78 HTTP/1.1
+POST http://localhost:5000/comments/67f15f4c0350a40b2b363d58 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZTFhMzI1ZmRhMDhlY2M0ZTYwMWJiZSIsIm5hbWUiOiJKYWNrIiwiZW1haWwiOiJ0b3JhbnMxMkBtYWlsLm5ldCIsImlhdCI6MTc0MjkwMzI5MSwiZXhwIjoxNzQzMDc2MDkxfQ.wIZ1b8KXLSYTDDnEwDRhVmBJHe8Y6y5r6v0qtKOUl60
+# Authorization: Bearer *
 
 {
   "comment": "New amazing comment",

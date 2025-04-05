@@ -12,8 +12,6 @@ import { EventName } from '../types/event-name.enum.js';
 import { CommentModel, OfferModel, UserModel } from '../../shared/modules/index.js';
 import { CommentService, DefaultCommentService } from '../../shared/modules/comment/index.js';
 
-const DEFAULT_USER_PASSWORD = '123456';
-
 export class ImportCommand implements Command {
   private readonly userService: UserService;
   private readonly offerService: OfferService;
@@ -40,7 +38,7 @@ export class ImportCommand implements Command {
 
   private async saveOffer(offer: Offer) {
     const user = await this.userService.findOrCreate(
-      Object.assign(offer.author, { password: DEFAULT_USER_PASSWORD }),
+      Object.assign(offer.author, { password: offer.author.password }),
       this.salt
     );
 

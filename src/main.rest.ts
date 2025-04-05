@@ -7,7 +7,7 @@ import { createUserContainer } from './shared/modules/user/index.js';
 import { createOfferContainer } from './shared/modules/offer/index.js';
 import { createCommentContainer } from './shared/modules/comment/index.js';
 import { createAuthContainer } from './shared/modules/auth/index.js';
-import { COMPONENT } from './shared/constant/component.constant.js';
+import { COMPONENT } from './shared/constant/index.js';
 
 async function bootstrap() {
   const appContainer = Container.merge(

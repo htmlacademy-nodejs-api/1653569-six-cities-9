@@ -20,8 +20,9 @@ import {
 
 import { OFFER } from '../offer.constant.js';
 import { OFFER_VALIDATION_MESSAGE } from './offer-validation.messages.js';
-import { CityName, Goods, OfferType } from '../../../types/index.js';
+import { Goods, OfferType } from '../../../types/index.js';
 import { LocationDTO } from './location.dto.js';
+import { CityDTO } from './city.dto.js';
 
 export class CreateOfferDTO {
   @IsString()
@@ -34,8 +35,9 @@ export class CreateOfferDTO {
   @MaxLength(OFFER.DESCRIPTION_LENGTH.MAX, { message: OFFER_VALIDATION_MESSAGE.DESCRIPTION.MAX_LENGTH })
   public description!: string;
 
-  @IsEnum(CityName, { message: OFFER_VALIDATION_MESSAGE.CITY.INVALID_FORMAT })
-  public city!: CityName;
+  @IsObject({ message: OFFER_VALIDATION_MESSAGE.CITY.INVALID_FORMAT })
+  @Type(() => CityDTO)
+  public city!: CityDTO;
 
   @IsString()
   @IsUrl({}, { message: OFFER_VALIDATION_MESSAGE.PREVIEW_IMAGE.INVALID_FORMAT })

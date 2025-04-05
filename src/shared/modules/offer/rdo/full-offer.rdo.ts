@@ -1,11 +1,12 @@
-import { Expose, Type } from 'class-transformer';
-import { CityName } from '../../../types/city-name.enum.js';
-import { OfferType } from '../../../types/offer-type.enum.js';
-import { Goods } from '../../../types/goods.enum.js';
-import { Location } from '../../../types/location.type.js';
+import { Expose, Transform, Type } from 'class-transformer';
+import { OfferType, Goods, Location, City } from '../../../types/index.js';
 import { UserRDO } from '../../user/rdo/user.rdo.js';
 
 export class FullOfferRDO {
+  @Expose()
+  @Transform(({ obj }) => obj._id.toString())
+  public id: string;
+
   @Expose()
   public title!: string;
 
@@ -16,7 +17,7 @@ export class FullOfferRDO {
   public createdDate!: Date;
 
   @Expose()
-  public city!: CityName;
+  public city!: City;
 
   @Expose()
   public previewImage!: string;

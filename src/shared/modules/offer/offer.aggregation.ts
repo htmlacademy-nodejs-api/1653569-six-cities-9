@@ -12,28 +12,25 @@ export const POPULATE_USER = [
   { $unwind: '$user' },
 ];
 
-export const populateFavorites = (userId: string, offerId?: string) => {
-  if (userId) {
-    return [
-      {
-        $lookup: {
-          from: 'users',
-          pipeline: [
-            { $match: { '_id': new Types.ObjectId(userId) } },
-            { $project: { favorites: 1 } }
-          ],
-          as: 'userFavorite'
-        },
-      },
-      { $unwind: '$userFavorite' },
-      { $addFields: { isFavorite: {
-        $in: [offerId ? new Types.ObjectId(offerId) : '$_id' , '$userFavorite.favorites']
-      } }},
-      { $unset: 'userFavorite' }
-    ];
+export const populateFavorites = (userId?: string, offerId?: string) => {
+  if (!userId) {
+    return [{ $addFields: { isFavorite: false } }];
   }
-
   return [
-    { $addFields: { isFavorite: false } },
+    {
+      $lookup: {
+        from: 'users',
+        pipeline: [
+          { $match: { '_id': new Types.ObjectId(userId) } },
+          { $project: { favorites: 1 } }
+        ],
+        as: 'userFavorite'
+      },
+    },
+    { $unwind: '$userFavorite' },
+    { $addFields: { isFavorite: {
+      $in: [offerId ? new Types.ObjectId(offerId) : '$_id' , '$userFavorite.favorites']
+    } }},
+    { $unset: 'userFavorite' }
   ];
 };

@@ -9,6 +9,7 @@ const ITEM_COUNT = {
 } as const;
 
 const RATIO_VALUE = 0.5;
+const LOCATION_RADIX = 5;
 
 export function generateRandomItemCount() {
   return generateRandomValue(ITEM_COUNT.MIN, ITEM_COUNT.MAX);
@@ -22,6 +23,10 @@ export function getRandomItems<T>(items: T[], isFixed: boolean = false): T[] {
   const startPosition = !isFixed ? generateRandomValue(0, items.length - 1) : ITEM_COUNT.MIN;
   const endPosition = !isFixed ? startPosition + generateRandomValue(startPosition, items.length) : ITEM_COUNT.MAX;
   return items.slice(startPosition, endPosition);
+}
+
+export function getRandomItemShift(item: number, shift: number) {
+  return +(item + generateRandomValue(-shift, shift, LOCATION_RADIX)).toFixed(LOCATION_RADIX);
 }
 
 export function getRandomItem<T>(items: T[]):T {

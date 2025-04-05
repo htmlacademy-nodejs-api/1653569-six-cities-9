@@ -6,7 +6,7 @@ import {
   Severity
 } from '@typegoose/typegoose';
 
-import { CityName, Goods, Location, OfferType } from '../../types/index.js';
+import { City, Goods, Location, OfferType } from '../../types/index.js';
 import { UserEntity } from '../user/user.entity.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -30,8 +30,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ trim: true, required: true })
   public description!: string;
 
-  @prop({ type: () => String, enum: CityName, required: true })
-  public city!: CityName;
+  @prop({ required: true })
+  public city!: City;
 
   @prop({ required: true })
   public previewImage!: string;

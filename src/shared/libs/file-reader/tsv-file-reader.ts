@@ -1,9 +1,10 @@
 import EventEmitter from 'node:events';
 import { createReadStream } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
-import { User, Offer, OfferType, CityName, UserType, Location, Goods } from '../../types/index.js';
+import { Offer, OfferType, UserType, Location, Goods, City, CityName } from '../../types/index.js';
 import { DECIMAL_RADIX, ENCODING_DEFAULT, SEPARATOR } from '../../constant/index.js';
 import { EventName } from '../../../cli/types/index.js';
+import { UserWithPassword } from '../../types/user.type.js';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
   private CHUNK_SIZE = 16384;
@@ -19,7 +20,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       title,
       description,
       createdDate,
-      city,
+      cityLocation,
       previewImage,
       images,
       isPremium,
@@ -30,14 +31,14 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       price,
       goods,
       user,
-      location,
+      offerLocation,
     ] = line.split(SEPARATOR.TAB);
 
     return {
       title,
       description,
       createdDate: new Date(createdDate),
-      city: city as CityName,
+      city: this.parseCityLocation(cityLocation),
       previewImage,
       images: this.parseStringToArray<string[]>(images),
       isPremium: this.parseToBoolean(isPremium),
@@ -48,7 +49,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       price: this.parseStringToNumber(price),
       goods: this.parseStringToArray<Goods[]>(goods),
       author: this.parseAuthor(user),
-      location: this.parseLocation(location),
+      location: this.parseOfferLocation(offerLocation),
     };
   }
 
@@ -64,7 +65,18 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     return value === 'true';
   }
 
-  private parseLocation(location: string): Location {
+  private parseCityLocation(location: string): City {
+    const [city, latitude, longitude] = location.split(SEPARATOR.SEMICOLON);
+    return {
+      name: city as CityName,
+      location: {
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude)
+      }
+    };
+  }
+
+  private parseOfferLocation(location: string): Location {
     const [latitude, longitude] = location.split(SEPARATOR.SEMICOLON);
     return {
       latitude: parseFloat(latitude),
@@ -72,9 +84,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     };
   }
 
-  private parseAuthor(user: string): User {
-    const [name, email, avatarPath, type] = user.split(SEPARATOR.SEMICOLON);
-    return {name, email, avatarPath, type: type as UserType};
+  private parseAuthor(user: string): UserWithPassword {
+    const [name, email, password, avatarPath, type] = user.split(SEPARATOR.SEMICOLON);
+    return {name, email, password, avatarPath, type: type as UserType};
   }
 
   public async read(): Promise<void> {

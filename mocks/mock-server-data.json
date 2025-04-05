@@ -2,19 +2,51 @@
   "api": {
     "titles": [
       "The Pondhouse - A Magical Place",
+      "The City Tower – A Modern Masterpiece",
       "Nice, cozy, warm big bed apartment",
-      "Tile House",
+      "Tile House - Nice and quiet place",
+      "The Mountain Cabin – A Nature Lover’s Paradise",
       "Canal View Prinsengracht",
-      "Loft Studio in the Central"
+      "Loft Studio in the Central",
+      "The Treehouse – A Hidden Gem",
+      "Cozy, Bright & Spacious Loft Retreat",
+      "The Brickhouse – Urban Charm",
+      "Amsterdam Canal View – Herengracht Haven",
+      "Downtown Studio – Heart of the City",
+      "The Beach House – A Tropical Retreat",
+      "The Glass Cabin – A Peaceful Escape",
+      "Modern & Warm Apartment with King Bed",
+      "The Courtyard House – Quiet & Stylish",
+      "Riverside Loft – Scenic & Central",
+      "Sunny Rooftop Studio – Perfect Location",
+      "The Garden House – Serene & Spacious"
 
+    ],
+    "images": [
+      "https://www.stockvault.net/data/2009/11/20/112064/preview16.jpg",
+      "https://www.stockvault.net/data/2013/05/28/145090/preview16.jpg",
+      "https://www.stockvault.net/data/2013/06/05/145374/preview16.jpg",
+      "https://www.stockvault.net/data/2012/12/24/139318/preview16.jpg",
+      "https://www.stockvault.net/data/2023/06/14/299999/preview16.jpg",
+      "https://www.stockvault.net/data/2008/05/30/105266/preview16.jpg",
+      "https://www.stockvault.net/data/2014/05/20/157658/preview16.jpg",
+      "https://www.stockvault.net/data/2012/04/16/130304/preview16.jpg",
+      "https://www.stockvault.net/data/2013/03/09/142677/preview16.jpg",
+      "https://www.stockvault.net/data/2013/03/09/142674/preview16.jpg",
+      "https://www.stockvault.net/data/2013/05/28/145095/preview16.jpg"
     ],
     "descriptions": [
       "I rent out a very sunny and bright apartment only 7 minutes walking distance to the metro station. The apartment has a spacious living room with a kitchen, one bedroom and a bathroom with mit bath. A terrace can be used in summer.",
       "Design interior in most sympathetic area! Complitely renovated, well-equipped, cosy studio in idyllic, over 100 years old wooden house. Calm street, fast connection to center and airport.",
       "Peaceful studio in the most wanted area in town. Quiet house Near of everything. Completely renovated. Lovely neighbourhood, lot of trendy shops, restaurants and bars in a walking distance.",
       "I am happy to welcome you to my apartment in the city center! Three words: location, cosy and chic!",
-      "Discover daily local life in city center, friendly neighborhood, clandestine casino, karaoke, old-style artisans, art gallery and artist studio downstairs."
-
+      "Discover daily local life in city center, friendly neighborhood, clandestine casino, karaoke, old-style artisans, art gallery and artist studio downstairs.",
+      "This is a very nice and cozy apartment in the center of the city. It is located in a quiet street, but close to all amenities. The apartment is very clean and has everything you need for a comfortable stay.",
+      "The apartment is located in the center of the city, close to all the main attractions. It is a cozy and comfortable place to stay, with a fully equipped kitchen and a comfortable living room.",
+      "Step into this beautifully renovated studio in a charming 100-year-old wooden house! Located in a quiet yet vibrant neighborhood, it offers a cozy retreat with modern comforts.",
+      "This peaceful studio sits in one of the city’s most sought-after neighborhoods—quiet yet close to everything! Recently renovated, it’s surrounded by trendy cafés, boutique shops, and lively bars, all within walking distance.",
+      "Immerse yourself in authentic city life! My apartment sits in a friendly neighborhood with hidden gems—think secret bars, quirky karaoke spots, artisan workshops, and even an art gallery right downstairs. A true local experience awaits!",
+      "I’m delighted to host you in my city-center apartment! Three words sum it up: prime location, cozy vibes, and chic design. Whether you're here to explore or unwind, this space offers the best of urban living."
     ],
     "cities": [
       {
@@ -61,23 +93,25 @@
       }
     ],
     "previewImages": [
-      "https://www.stockvault.net/data/2009/11/20/112064/preview16.jpg",
-      "https://www.stockvault.net/data/2013/05/28/145090/preview16.jpg",
       "https://www.stockvault.net/data/2012/04/16/130306/preview16.jpg",
       "https://www.stockvault.net/data/2012/04/16/130301/preview16.jpg",
-      "https://www.stockvault.net/data/2013/06/05/145374/preview16.jpg",
       "https://www.stockvault.net/data/2013/02/26/142231/preview16.jpg",
       "https://www.stockvault.net/data/2012/04/16/130304/preview16.jpg",
       "https://www.stockvault.net/data/2009/12/21/112484/preview16.jpg",
       "https://www.stockvault.net/data/2016/03/25/190653/preview16.jpg",
-      "https://www.stockvault.net/data/2012/12/24/139318/preview16.jpg"
-
+      "https://www.stockvault.net/data/2013/02/26/142231/preview16.jpg",
+      "https://www.stockvault.net/data/2013/02/26/142232/preview16.jpg",
+      "https://www.stockvault.net/data/2008/11/06/106525/preview16.jpg",
+      "https://www.stockvault.net/data/2013/03/04/142532/preview16.jpg",
+      "https://www.stockvault.net/data/2016/03/25/190653/preview16.jpg",
+      "https://www.stockvault.net/data/2015/10/12/180159/preview16.jpg",
+      "https://www.stockvault.net/data/2014/07/14/159992/preview16.jpg"
     ],
     "types": [
-      "House",
-      "Room",
-      "Apartment",
-      "Hotel"
+      "house",
+      "room",
+      "apartment",
+      "hotel"
     ],
     "goods": [
       "Breakfast",
@@ -97,28 +131,23 @@
       "Kate"
     ],
     "emails": [
-      "user343@gmail.com",
-      "user421@gmail.com",
-      "user174@gmail.com",
-      "user283@.gmail.com",
-      "user731@gmail.com",
-      "user924@gmail.com"
+      "user1@mail.com",
+      "user2@mail.com",
+      "user3@mail.com",
+      "user4@mail.com",
+      "user5@mail.com",
+      "user6@mail.com"
     ],
-    "avatarPaths": [
-      "https://i.pravatar.cc/150?img=1",
-      "https://i.pravatar.cc/150?img=8",
-      "https://i.pravatar.cc/150?img=15",
-      "https://i.pravatar.cc/150?img=26",
-      "https://i.pravatar.cc/150?img=33",
-      "https://i.pravatar.cc/150?img=47"
+    "avatars": [
+      "user-avatar-01.jpg",
+      "user-avatar-02.jpg",
+      "user-avatar-03.jpg",
+      "user-avatar-04.jpg",
+      "user-avatar-05.jpg",
+      "user-avatar-06.jpg"
     ],
     "passwords": [
-      "*e{6PK^H<e",
-      "Vr4>}xd6RQ",
-      "5n%ryxS!S8",
-      "JKc<f@f9+V",
-      "Q}./.qCXb8",
-      "tS42W$}zH!"
+      "123456"
     ],
     "userTypes": [
       "обычный",

@@ -1,3 +1,3 @@
 export interface DocumentAuthor {
-  isAuthorOffer(offerId: string, userId: string): Promise<boolean>;
+  isOfferAuthor(offerId: string, userId: string): Promise<boolean>;
 }

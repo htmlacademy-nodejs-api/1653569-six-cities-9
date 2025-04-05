@@ -1,4 +1,4 @@
 export enum EventName {
-Line = 'line',
-End = 'end'
+  Line = 'line',
+  End = 'end'
 }

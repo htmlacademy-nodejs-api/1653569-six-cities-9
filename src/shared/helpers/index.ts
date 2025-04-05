@@ -2,6 +2,7 @@ export {
   generateRandomValue,
   getRandomItems,
   getRandomItem,
+  getRandomItemShift,
   getRandomBoolean,
   getErrorMessage,
   fillDTO,

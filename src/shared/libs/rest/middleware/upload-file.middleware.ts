@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 import multer, { diskStorage } from 'multer';
 
 import { Middleware } from './middleware.interface.js';
-import { HttpError } from '../errors/http-error.js';
+import { HttpError } from '../errors/index.js';
 import { StatusCodes } from 'http-status-codes';
 
 const ALLOWED = {
