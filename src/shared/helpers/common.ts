@@ -11,10 +11,6 @@ const ITEM_COUNT = {
 const RATIO_VALUE = 0.5;
 const LOCATION_RADIX = 5;
 
-export function generateRandomItemCount() {
-  return generateRandomValue(ITEM_COUNT.MIN, ITEM_COUNT.MAX);
-}
-
 export function generateRandomValue(min: number, max: number, numAfterDigit = 0) {
   return +((Math.random() * (max - min)) + min).toFixed(numAfterDigit);
 }

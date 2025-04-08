@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 import {
   BaseController,
@@ -17,9 +17,9 @@ import { OfferService } from '../offer/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CommentRDO } from './rdo/comment.rdo.js';
 import { CreateCommentRequest } from './types/create-comment-request.type.js';
+import { IndexCommentRequest } from './types/index-comment-request.type.js';
 import { CreateCommentDTO } from './dto/create-comment.dto.js';
 import { OfferRoute } from '../offer/offer.constant.js';
-import { ParamOfferId } from '../offer/types/param-offerid.type.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -54,7 +54,7 @@ export class CommentController extends BaseController {
     });
   }
 
-  public async index({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+  public async index({ params }: IndexCommentRequest, res: Response): Promise<void> {
     const comments = await this.commentService.findByOfferId(params.offerId);
     this.ok(res, fillDTO(CommentRDO, comments));
   }
