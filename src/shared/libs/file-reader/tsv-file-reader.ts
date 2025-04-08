@@ -96,13 +96,13 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     });
 
     let remainingData = '';
-    let nextLinePosition = -1;
     let importedRowCount = 0;
 
     for await (const chunk of readStream) {
       remainingData += chunk.toString();
 
-      while ((nextLinePosition = remainingData.indexOf(SEPARATOR.ROW)) >= 0) {
+      while (remainingData.indexOf(SEPARATOR.ROW) >= 0) {
+        let nextLinePosition = remainingData.indexOf(SEPARATOR.ROW);
         const completeRow = remainingData.slice(0, nextLinePosition + 1);
         remainingData = remainingData.slice(++nextLinePosition);
         importedRowCount++;
